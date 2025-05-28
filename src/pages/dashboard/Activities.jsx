@@ -16,6 +16,7 @@ import {
   ChevronDown,
   Download,
   RefreshCw,
+  Menu,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -56,6 +57,7 @@ const Activities = () => {
   const [showFilters, setShowFilters] = useState(false)
   const [deleteActivityId, setDeleteActivityId] = useState(null)
   const [selectedRows, setSelectedRows] = useState(new Set())
+  const [showMobileOptions, setShowMobileOptions] = useState(false)
 
   const itemsPerPage = 10
 
@@ -82,6 +84,56 @@ const Activities = () => {
                 id: 1,
                 starts_at: "2025-05-25T17:34:32.000000Z",
                 ends_at: "2025-05-25T17:34:32.000000Z",
+              },
+            ],
+          },
+          {
+            id: 1,
+            title: "Hiking",
+            description: "on the mountains",
+            price: "500.00",
+            time_slots: [
+              {
+                id: 3,
+                starts_at: "2025-05-28T16:36:10.000000Z",
+                ends_at: "2025-05-31T16:36:10.000000Z",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: 5,
+        title: "Alaskan Adventure Package",
+        description: "10-day wildlife tour with glacier hikes and whale watching",
+        base_price: "1899.95",
+        location: "Anchorage, Alaska",
+        is_active: true,
+        is_featured: true,
+        activities: [
+          {
+            id: 4,
+            title: "Glacier Hiking",
+            description: "Explore stunning glaciers with expert guides",
+            price: "750.00",
+            time_slots: [
+              {
+                id: 4,
+                starts_at: "2025-08-10T08:00:00.000000Z",
+                ends_at: "2025-08-10T16:00:00.000000Z",
+              },
+            ],
+          },
+          {
+            id: 5,
+            title: "Whale Watching",
+            description: "Observe magnificent whales in their natural habitat",
+            price: "450.00",
+            time_slots: [
+              {
+                id: 5,
+                starts_at: "2025-08-12T06:00:00.000000Z",
+                ends_at: "2025-08-12T12:00:00.000000Z",
               },
             ],
           },
@@ -245,28 +297,44 @@ const Activities = () => {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
+      <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
         <div>
           <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">All Activities</h1>
           <p className="text-sm text-gray-600 mt-1">
             Manage all activities across your travel packages ({filteredActivities.length} total)
           </p>
         </div>
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
-          <Button variant="outline" onClick={handleRefresh} className="w-full sm:w-auto">
-            <RefreshCw className="w-4 h-4 mr-2" />
-            Refresh
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          {/* Mobile menu button */}
+          <Button
+            variant="outline"
+            size="sm"
+            className="sm:hidden"
+            onClick={() => setShowMobileOptions(!showMobileOptions)}
+          >
+            <Menu className="h-4 w-4 mr-2" />
+            Options
           </Button>
-          <Button variant="outline" className="w-full sm:w-auto">
-            <Download className="w-4 h-4 mr-2" />
-            Export
-          </Button>
-          <Button onClick={() => navigate("/admin/create-activities")} className="w-full sm:w-auto">
-            <Plus className="w-4 h-4 mr-2" />
-            Create Activity
-          </Button>
+
+          {/* Desktop buttons / Mobile dropdown */}
+          <div
+            className={`${showMobileOptions ? "flex" : "hidden"} flex-col w-full space-y-2 sm:flex sm:flex-row sm:w-auto sm:space-y-0 sm:space-x-3`}
+          >
+            <Button variant="outline" onClick={handleRefresh} className="w-full sm:w-auto">
+              <RefreshCw className="w-4 h-4 mr-2" />
+              Refresh
+            </Button>
+            <Button variant="outline" className="w-full sm:w-auto">
+              <Download className="w-4 h-4 mr-2" />
+              Export
+            </Button>
+            <Button onClick={() => navigate("/admin/create-activities")} className="w-full sm:w-auto">
+              <Plus className="w-4 h-4 mr-2" />
+              Create Activity
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -274,7 +342,7 @@ const Activities = () => {
       <div className="bg-white rounded-lg border border-gray-200 p-4">
         <div className="flex flex-col space-y-4 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
           <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-4">
-            <div className="relative">
+            <div className="relative w-full sm:w-auto">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <Input
                 type="text"
@@ -302,7 +370,7 @@ const Activities = () => {
             </DropdownMenu>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+          <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-4">
             <Select value={sortBy} onValueChange={setSortBy}>
               <SelectTrigger className="w-full sm:w-48">
                 <SelectValue placeholder="Sort by..." />
@@ -314,8 +382,13 @@ const Activities = () => {
                 <SelectItem value="packageTitle">Sort by Package</SelectItem>
               </SelectContent>
             </Select>
-            <Button variant="outline" size="sm" onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}>
-              {sortOrder === "asc" ? "↑" : "↓"}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+              className="w-full sm:w-auto"
+            >
+              {sortOrder === "asc" ? "↑ Ascending" : "↓ Descending"}
             </Button>
           </div>
         </div>
@@ -349,13 +422,13 @@ const Activities = () => {
       {/* Bulk Actions */}
       {selectedRows.size > 0 && (
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
             <span className="text-sm font-medium text-blue-900">{selectedRows.size} activities selected</span>
-            <div className="flex space-x-2">
-              <Button variant="destructive" size="sm">
+            <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
+              <Button variant="destructive" size="sm" className="w-full sm:w-auto">
                 Delete Selected
               </Button>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" className="w-full sm:w-auto">
                 Export Selected
               </Button>
             </div>
@@ -363,8 +436,8 @@ const Activities = () => {
         </div>
       )}
 
-      {/* Activities Table */}
-      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+      {/* Activities Table - Desktop */}
+      <div className="hidden sm:block bg-white rounded-lg border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
@@ -556,6 +629,112 @@ const Activities = () => {
         )}
       </div>
 
+      {/* Mobile Cards View */}
+      <div className="block sm:hidden">
+        <div className="space-y-4">
+          {currentActivities.map((activity) => {
+            const activityKey = `${activity.packageId}-${activity.id}`
+            return (
+              <div key={activityKey} className="bg-white rounded-lg border p-4 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <Checkbox
+                      checked={selectedRows.has(activityKey)}
+                      onCheckedChange={() => handleSelectRow(activityKey)}
+                    />
+                    <div>
+                      <p className="font-medium text-sm">{activity.title}</p>
+                      <p className="text-xs text-gray-500">{activity.packageTitle}</p>
+                    </div>
+                  </div>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                        <ChevronDown className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={() => handleView(activity)}>
+                        <Eye className="w-4 h-4 mr-2" />
+                        View Details
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleEdit(activity)}>
+                        <Edit className="w-4 h-4 mr-2" />
+                        Edit Activity
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        onClick={() => handleDelete(activity.id, activity.packageId)}
+                        className="text-red-600"
+                      >
+                        <Trash2 className="w-4 h-4 mr-2" />
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600">Description</span>
+                    <span className="text-sm font-medium truncate max-w-[150px]">{activity.description}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600">Price</span>
+                    <span className="text-sm font-medium">{formatPrice(activity.price)}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600">Time Slots</span>
+                    <Badge variant={activity.timeSlotCount > 0 ? "default" : "secondary"} className="text-xs">
+                      <Clock className="w-3 h-3 mr-1" />
+                      {activity.timeSlotCount}
+                    </Badge>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600">Status</span>
+                    {getStatusBadge(activity)}
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600">Location</span>
+                    <div className="flex items-center text-sm">
+                      <MapPin className="w-3 h-3 mr-1 text-red-500" />
+                      <span className="truncate max-w-[120px]">{activity.packageLocation}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Mobile Pagination */}
+        {totalPages > 1 && (
+          <div className="flex justify-between items-center mt-4">
+            <Button
+              variant="outline"
+              onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+              disabled={currentPage === 1}
+              className="w-24"
+            >
+              Previous
+            </Button>
+            <div className="flex items-center justify-center px-4">
+              <span className="text-sm text-gray-700">
+                Page {currentPage} of {totalPages}
+              </span>
+            </div>
+            <Button
+              variant="outline"
+              onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+              disabled={currentPage === totalPages}
+              className="w-24"
+            >
+              Next
+            </Button>
+          </div>
+        )}
+      </div>
+
       {/* Delete Confirmation Dialog */}
       <AlertDialog
         open={!!deleteActivityId}
@@ -572,9 +751,9 @@ const Activities = () => {
               Are you sure you want to delete this activity? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDelete} className="bg-red-600 hover:bg-red-700">
+          <AlertDialogFooter className="flex-col space-y-2 sm:flex-row sm:justify-end sm:space-x-2 sm:space-y-0">
+            <AlertDialogCancel className="w-full sm:w-auto">Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete} className="w-full sm:w-auto bg-red-600 hover:bg-red-700">
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>

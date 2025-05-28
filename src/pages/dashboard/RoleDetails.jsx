@@ -123,7 +123,7 @@ const RoleDetails = () => {
 
   if (loading) {
     return (
-      <div className="p-6 flex items-center justify-center h-64">
+      <div className="p-4 sm:p-6 flex items-center justify-center h-64">
         <div className="flex items-center space-x-2">
           <div className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
           <span>Loading role details...</span>
@@ -134,7 +134,7 @@ const RoleDetails = () => {
 
   if (!role) {
     return (
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         <div className="flex items-center space-x-4 mb-6">
           <Button
             variant="outline"
@@ -156,30 +156,34 @@ const RoleDetails = () => {
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto space-y-6">
+    <div className="p-4 sm:p-6 max-w-4xl mx-auto space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
-        <div className="flex items-center space-x-4">
+      <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+        <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-4">
           <Button
             variant="outline"
             size="sm"
             onClick={() => navigate("/admin/role-management")}
-            className="flex items-center space-x-2"
+            className="flex items-center space-x-2 w-fit"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Roles</span>
           </Button>
           <div>
-            <h1 className="text-2xl font-semibold text-gray-900">Role Details</h1>
+            <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">Role Details</h1>
             <p className="text-sm text-gray-600 mt-1">View detailed information about this role</p>
           </div>
         </div>
-        <div className="flex items-center space-x-3">
-          <Button variant="outline" onClick={() => navigate(`/admin/roles/${roleId}/edit`)}>
+        <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-3">
+          <Button
+            variant="outline"
+            onClick={() => navigate(`/admin/roles/${roleId}/edit`)}
+            className="w-full sm:w-auto"
+          >
             <Edit className="w-4 h-4 mr-2" />
             Edit Role
           </Button>
-          <Button variant="destructive" onClick={handleDelete}>
+          <Button variant="destructive" onClick={handleDelete} className="w-full sm:w-auto">
             <Trash2 className="w-4 h-4 mr-2" />
             Delete Role
           </Button>
@@ -189,11 +193,13 @@ const RoleDetails = () => {
       {/* Role Overview Card */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <div className={`w-8 h-8 ${role.color} rounded-lg flex items-center justify-center`}>
-              <Shield className="w-4 h-4" />
+          <CardTitle className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-2">
+            <div className="flex items-center space-x-2">
+              <div className={`w-8 h-8 ${role.color} rounded-lg flex items-center justify-center`}>
+                <Shield className="w-4 h-4" />
+              </div>
+              <span>{role.name}</span>
             </div>
-            <span>{role.name}</span>
             <Badge
               variant="secondary"
               className={role.status === "active" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}
@@ -204,7 +210,7 @@ const RoleDetails = () => {
           <CardDescription>{role.description}</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <div className="space-y-4">
               <div>
                 <h3 className="text-sm font-medium text-gray-500">Created</h3>
@@ -224,16 +230,16 @@ const RoleDetails = () => {
             <div className="space-y-4">
               <div>
                 <h3 className="text-sm font-medium text-gray-500">Status</h3>
-                <p className="mt-1 flex items-center text-sm text-gray-900">
+                <p className="mt-1 flex items-start text-sm text-gray-900">
                   {role.status === "active" ? (
                     <>
-                      <CheckCircle className="w-4 h-4 mr-2 text-green-500" />
-                      Active - This role can be assigned to users
+                      <CheckCircle className="w-4 h-4 mr-2 text-green-500 mt-0.5" />
+                      <span>Active - This role can be assigned to users</span>
                     </>
                   ) : (
                     <>
-                      <XCircle className="w-4 h-4 mr-2 text-red-500" />
-                      Inactive - This role cannot be assigned to users
+                      <XCircle className="w-4 h-4 mr-2 text-red-500 mt-0.5" />
+                      <span>Inactive - This role cannot be assigned to users</span>
                     </>
                   )}
                 </p>
@@ -263,12 +269,15 @@ const RoleDetails = () => {
           {role.users && role.users.length > 0 ? (
             <div className="border rounded-lg divide-y">
               {role.users.map((user) => (
-                <div key={user.id} className="flex items-center justify-between p-4">
-                  <div>
+                <div
+                  key={user.id}
+                  className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 p-4"
+                >
+                  <div className="min-w-0 flex-1">
                     <p className="font-medium text-gray-900">{user.name}</p>
-                    <p className="text-sm text-gray-500">{user.email}</p>
+                    <p className="text-sm text-gray-500 break-all">{user.email}</p>
                   </div>
-                  <Button variant="ghost" size="sm">
+                  <Button variant="ghost" size="sm" className="w-full sm:w-auto">
                     View User
                   </Button>
                 </div>
@@ -294,9 +303,9 @@ const RoleDetails = () => {
               assigned to this role.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDelete} className="bg-red-600 hover:bg-red-700">
+          <AlertDialogFooter className="flex-col space-y-2 sm:flex-row sm:justify-end sm:space-x-2 sm:space-y-0">
+            <AlertDialogCancel className="w-full sm:w-auto">Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete} className="w-full sm:w-auto bg-red-600 hover:bg-red-700">
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>

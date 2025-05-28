@@ -1,38 +1,40 @@
-import React, { useState } from 'react';
-import { ChevronUp, ChevronDown, Calendar, Clock, MapPin, Shield, Upload, HelpCircle, Plus, X } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { Checkbox } from '@/components/ui/checkbox';
+"use client"
+
+import { useState } from "react"
+import { ChevronUp, ChevronDown, MapPin, Shield, Upload, Plus, X } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
+import { Checkbox } from "@/components/ui/checkbox"
 
 export default function PackageBuilder() {
-  const [isExpanded, setIsExpanded] = useState(true);
-  const [activities, setActivities] = useState([]);
-  const [newActivity, setNewActivity] = useState({ title: '', description: '', price: '' });
-  const [isAddingActivity, setIsAddingActivity] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true)
+  const [activities, setActivities] = useState([])
+  const [newActivity, setNewActivity] = useState({ title: "", description: "", price: "" })
+  const [isAddingActivity, setIsAddingActivity] = useState(false)
 
   const addActivity = () => {
     if (newActivity.title && newActivity.description && newActivity.price) {
-      setActivities([...activities, { ...newActivity, id: Date.now() }]);
-      setNewActivity({ title: '', description: '', price: '' });
-      setIsAddingActivity(false);
+      setActivities([...activities, { ...newActivity, id: Date.now() }])
+      setNewActivity({ title: "", description: "", price: "" })
+      setIsAddingActivity(false)
     }
-  };
+  }
 
   const removeActivity = (id) => {
-    setActivities(activities.filter(activity => activity.id !== id));
-  };
+    setActivities(activities.filter((activity) => activity.id !== id))
+  }
 
   return (
-    <div className="w-full max-w-3xl mx-auto bg-white shadow-lg rounded-lg">
+    <div className="w-full max-w-4xl mx-auto bg-white shadow-lg rounded-lg">
       {/* Header */}
-      <div 
-        className="flex items-center justify-between p-4 bg-gray-50 border-b cursor-pointer rounded-t-lg"
+      <div
+        className="flex items-center justify-between p-4 sm:p-6 bg-gray-50 border-b cursor-pointer rounded-t-lg"
         onClick={() => setIsExpanded(!isExpanded)}
       >
-        <h2 className="text-lg font-medium text-gray-900">Travel Package Builder</h2>
+        <h2 className="text-lg sm:text-xl font-medium text-gray-900">Travel Package Builder</h2>
         {isExpanded ? (
           <ChevronUp className="w-5 h-5 text-gray-500" />
         ) : (
@@ -42,12 +44,12 @@ export default function PackageBuilder() {
 
       {/* Form Content */}
       {isExpanded && (
-        <div className="p-6 space-y-6">
+        <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
           {/* Package Title and Description */}
-          <div className="grid grid-cols-1 gap-4">
+          <div className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="title" className="text-sm font-medium text-gray-700">
-                Package Title
+                Package Title *
               </Label>
               <Input
                 id="title"
@@ -58,7 +60,7 @@ export default function PackageBuilder() {
 
             <div className="space-y-2">
               <Label htmlFor="description" className="text-sm font-medium text-gray-700">
-                Description
+                Description *
               </Label>
               <Textarea
                 id="description"
@@ -69,7 +71,7 @@ export default function PackageBuilder() {
           </div>
 
           {/* Base Price and Location */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="base-price" className="text-sm font-medium text-gray-700">
                 Base Price ($) *
@@ -101,7 +103,7 @@ export default function PackageBuilder() {
           </div>
 
           {/* Agent Pricing */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="agent-addon-price" className="text-sm font-medium text-gray-700">
                 Agent Addon Price ($) *
@@ -117,9 +119,7 @@ export default function PackageBuilder() {
             </div>
 
             <div className="space-y-2">
-              <Label className="text-sm font-medium text-gray-700">
-                Agent Price Type *
-              </Label>
+              <Label className="text-sm font-medium text-gray-700">Agent Price Type *</Label>
               <Select defaultValue="">
                 <SelectTrigger className="w-full h-10 bg-gray-50">
                   <SelectValue placeholder="Select type" />
@@ -132,7 +132,8 @@ export default function PackageBuilder() {
             </div>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-4">
+          {/* Check-in/out Times */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="check-in-time" className="text-sm font-medium text-gray-700">
                 Check-in Time *
@@ -160,7 +161,7 @@ export default function PackageBuilder() {
           {/* Package Settings */}
           <div className="space-y-4">
             <h3 className="text-sm font-medium text-gray-700">Package Settings</h3>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               <div className="flex items-center space-x-2">
                 <Checkbox id="is-active" />
                 <Label htmlFor="is-active" className="text-sm text-gray-600">
@@ -179,10 +180,10 @@ export default function PackageBuilder() {
                   Refundable
                 </Label>
               </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-sm font-medium text-gray-700">
-                  Visibility
-                </Label>
+                <Label className="text-sm font-medium text-gray-700">Visibility</Label>
                 <Select defaultValue="public">
                   <SelectTrigger className="w-full h-10 bg-gray-50">
                     <SelectValue />
@@ -197,7 +198,7 @@ export default function PackageBuilder() {
           </div>
 
           {/* Terms and Policies */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="terms" className="text-sm font-medium text-gray-700">
                 Terms and Conditions
@@ -223,12 +224,12 @@ export default function PackageBuilder() {
 
           {/* Activities Section */}
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
               <h3 className="text-sm font-medium text-gray-700">Package Activities</h3>
               <Button
                 onClick={() => setIsAddingActivity(true)}
                 size="sm"
-                className="flex items-center gap-2 h-8 px-3 text-xs bg-blue-600 text-white hover:bg-blue-700"
+                className="flex items-center gap-2 h-8 px-3 text-xs bg-blue-600 text-white hover:bg-blue-700 w-fit"
               >
                 <Plus className="w-3 h-3" />
                 Add Activity
@@ -238,7 +239,7 @@ export default function PackageBuilder() {
             {/* Existing Activities */}
             {activities.map((activity) => (
               <div key={activity.id} className="p-4 border border-gray-200 rounded-md bg-gray-50">
-                <div className="flex items-start justify-between">
+                <div className="flex flex-col space-y-2 sm:flex-row sm:items-start sm:justify-between sm:space-y-0">
                   <div className="flex-1">
                     <h4 className="font-medium text-gray-900">{activity.title}</h4>
                     <p className="text-sm text-gray-600 mt-1">{activity.description}</p>
@@ -248,7 +249,7 @@ export default function PackageBuilder() {
                     onClick={() => removeActivity(activity.id)}
                     variant="outline"
                     size="sm"
-                    className="ml-2 h-6 w-6 p-0 text-red-500 hover:text-red-700"
+                    className="h-6 w-6 p-0 text-red-500 hover:text-red-700 self-start sm:ml-2"
                   >
                     <X className="w-3 h-3" />
                   </Button>
@@ -260,11 +261,11 @@ export default function PackageBuilder() {
             {isAddingActivity && (
               <div className="p-4 border border-blue-200 rounded-md bg-blue-50">
                 <div className="space-y-3">
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <Input
                       placeholder="Activity title (e.g., Swimming)"
                       value={newActivity.title}
-                      onChange={(e) => setNewActivity({...newActivity, title: e.target.value})}
+                      onChange={(e) => setNewActivity({ ...newActivity, title: e.target.value })}
                       className="bg-white"
                     />
                     <Input
@@ -272,28 +273,33 @@ export default function PackageBuilder() {
                       type="number"
                       step="0.01"
                       value={newActivity.price}
-                      onChange={(e) => setNewActivity({...newActivity, price: e.target.value})}
+                      onChange={(e) => setNewActivity({ ...newActivity, price: e.target.value })}
                       className="bg-white"
                     />
                   </div>
                   <Textarea
                     placeholder="Activity description (e.g., going swimming at the beach)"
                     value={newActivity.description}
-                    onChange={(e) => setNewActivity({...newActivity, description: e.target.value})}
+                    onChange={(e) => setNewActivity({ ...newActivity, description: e.target.value })}
                     className="bg-white resize-none"
                     rows={2}
                   />
-                  <div className="flex gap-2">
-                    <Button onClick={addActivity} size="sm" className="bg-blue-600 text-white hover:bg-blue-700">
+                  <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
+                    <Button
+                      onClick={addActivity}
+                      size="sm"
+                      className="bg-blue-600 text-white hover:bg-blue-700 w-full sm:w-auto"
+                    >
                       Add Activity
                     </Button>
-                    <Button 
+                    <Button
                       onClick={() => {
-                        setIsAddingActivity(false);
-                        setNewActivity({ title: '', description: '', price: '' });
+                        setIsAddingActivity(false)
+                        setNewActivity({ title: "", description: "", price: "" })
                       }}
-                      variant="outline" 
+                      variant="outline"
                       size="sm"
+                      className="w-full sm:w-auto"
                     >
                       Cancel
                     </Button>
@@ -304,12 +310,12 @@ export default function PackageBuilder() {
           </div>
 
           {/* Bottom Options */}
-          <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-            <div className="flex items-center gap-4">
+          <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 pt-4 border-t border-gray-200">
+            <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-4">
               <Button
                 variant="outline"
                 size="sm"
-                className="flex items-center gap-2 h-8 px-3 text-xs bg-gray-900 text-white border-gray-900 hover:bg-gray-800"
+                className="flex items-center gap-2 h-8 px-3 text-xs bg-gray-900 text-white border-gray-900 hover:bg-gray-800 w-fit"
               >
                 <Upload className="w-3 h-3" />
                 Upload Media
@@ -320,17 +326,17 @@ export default function PackageBuilder() {
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-2">
               <Button
                 variant="outline"
                 size="sm"
-                className="h-8 px-4 text-sm border-gray-300 text-gray-700 hover:bg-gray-50"
+                className="h-8 px-4 text-sm border-gray-300 text-gray-700 hover:bg-gray-50 w-full sm:w-auto"
               >
                 Cancel
               </Button>
               <Button
                 size="sm"
-                className="h-8 px-4 text-sm bg-green-600 text-white hover:bg-green-700"
+                className="h-8 px-4 text-sm bg-green-600 text-white hover:bg-green-700 w-full sm:w-auto"
               >
                 Create Package
               </Button>
@@ -339,5 +345,5 @@ export default function PackageBuilder() {
         </div>
       )}
     </div>
-  );
+  )
 }

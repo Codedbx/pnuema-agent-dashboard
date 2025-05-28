@@ -180,9 +180,9 @@ const EditActivity = () => {
 
   if (!activity) {
     return (
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         <div className="text-center">
-          <h2 className="text-2xl font-semibold text-gray-900">Activity Not Found</h2>
+          <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">Activity Not Found</h2>
           <p className="text-gray-600 mt-2">The activity you're trying to edit doesn't exist.</p>
           <Button onClick={() => navigate("/admin/activities")} className="mt-4">
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -194,31 +194,39 @@ const EditActivity = () => {
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto space-y-6">
+    <div className="p-4 sm:p-6 max-w-4xl mx-auto space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <Button variant="outline" onClick={() => navigate(`/admin/activities/${packageId}/${activityId}`)}>
+      <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+        <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-4">
+          <Button
+            variant="outline"
+            onClick={() => navigate(`/admin/activities/${packageId}/${activityId}`)}
+            className="w-fit"
+          >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Details
           </Button>
           <div>
-            <h1 className="text-2xl font-semibold text-gray-900">Edit Activity</h1>
+            <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">Edit Activity</h1>
             <p className="text-sm text-gray-600 mt-1">Make changes to the activity details</p>
           </div>
         </div>
-        <div className="flex items-center space-x-3">
-          <Button variant="outline" onClick={() => navigate(`/admin/activities/${packageId}/${activityId}`)}>
+        <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-3">
+          <Button
+            variant="outline"
+            onClick={() => navigate(`/admin/activities/${packageId}/${activityId}`)}
+            className="w-full sm:w-auto"
+          >
             Cancel
           </Button>
-          <Button onClick={handleSave} disabled={saving}>
+          <Button onClick={handleSave} disabled={saving} className="w-full sm:w-auto">
             <Save className="w-4 h-4 mr-2" />
             {saving ? "Saving..." : "Save Changes"}
           </Button>
         </div>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {/* Basic Information */}
         <Card>
           <CardHeader>
@@ -329,11 +337,11 @@ const EditActivity = () => {
                               Are you sure you want to remove this image? This action cannot be undone.
                             </AlertDialogDescription>
                           </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogFooter className="flex-col space-y-2 sm:flex-row sm:justify-end sm:space-x-2 sm:space-y-0">
+                            <AlertDialogCancel className="w-full sm:w-auto">Cancel</AlertDialogCancel>
                             <AlertDialogAction
                               onClick={() => removeImage(image.id)}
-                              className="bg-red-600 hover:bg-red-700"
+                              className="w-full sm:w-auto bg-red-600 hover:bg-red-700"
                             >
                               Remove
                             </AlertDialogAction>
@@ -352,7 +360,7 @@ const EditActivity = () => {
         {/* Time Slots Management */}
         <Card>
           <CardHeader>
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
               <div>
                 <CardTitle className="flex items-center">
                   <Calendar className="w-5 h-5 mr-2" />
@@ -360,7 +368,7 @@ const EditActivity = () => {
                 </CardTitle>
                 <CardDescription>Define when this activity is available for booking</CardDescription>
               </div>
-              <Button onClick={addTimeSlot} size="sm">
+              <Button onClick={addTimeSlot} size="sm" className="w-full sm:w-auto">
                 <Plus className="w-4 h-4 mr-2" />
                 Add Time Slot
               </Button>
@@ -371,7 +379,7 @@ const EditActivity = () => {
               <div className="space-y-4">
                 {timeSlots.map((slot, index) => (
                   <div key={slot.id} className="border rounded-lg p-4 bg-gray-50">
-                    <div className="flex items-center justify-between mb-4">
+                    <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 mb-4">
                       <div className="flex items-center space-x-2">
                         <h4 className="font-medium text-gray-900">Time Slot {index + 1}</h4>
                         <div className="flex items-center space-x-1 text-xs text-gray-500">
@@ -382,7 +390,11 @@ const EditActivity = () => {
                       {timeSlots.length > 1 && (
                         <AlertDialog>
                           <AlertDialogTrigger asChild>
-                            <Button variant="outline" size="sm" className="text-red-600 border-red-200 hover:bg-red-50">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="text-red-600 border-red-200 hover:bg-red-50 w-full sm:w-auto"
+                            >
                               <X className="w-4 h-4" />
                             </Button>
                           </AlertDialogTrigger>
@@ -393,11 +405,11 @@ const EditActivity = () => {
                                 Are you sure you want to remove this time slot? This action cannot be undone.
                               </AlertDialogDescription>
                             </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogFooter className="flex-col space-y-2 sm:flex-row sm:justify-end sm:space-x-2 sm:space-y-0">
+                              <AlertDialogCancel className="w-full sm:w-auto">Cancel</AlertDialogCancel>
                               <AlertDialogAction
                                 onClick={() => removeTimeSlot(slot.id)}
-                                className="bg-red-600 hover:bg-red-700"
+                                className="w-full sm:w-auto bg-red-600 hover:bg-red-700"
                               >
                                 Remove
                               </AlertDialogAction>
@@ -456,7 +468,7 @@ const EditActivity = () => {
             <CardDescription>Preview of the data that will be sent to the API</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="bg-gray-100 rounded-md p-4">
+            <div className="bg-gray-100 rounded-md p-4 overflow-x-auto">
               <pre className="text-xs font-mono text-gray-700 whitespace-pre-wrap">
                 {JSON.stringify(
                   {

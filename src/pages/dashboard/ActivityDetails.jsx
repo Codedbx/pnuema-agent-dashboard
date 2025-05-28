@@ -176,9 +176,9 @@ const ActivityDetails = () => {
 
   if (!activity) {
     return (
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         <div className="text-center">
-          <h2 className="text-2xl font-semibold text-gray-900">Activity Not Found</h2>
+          <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">Activity Not Found</h2>
           <p className="text-gray-600 mt-2">The activity you're looking for doesn't exist.</p>
           <Button onClick={() => navigate("/admin/activities")} className="mt-4">
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -190,35 +190,35 @@ const ActivityDetails = () => {
   }
 
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-6">
+    <div className="p-4 sm:p-6 max-w-6xl mx-auto space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <Button variant="outline" onClick={() => navigate("/admin/activities")}>
+      <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+        <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-4">
+          <Button variant="outline" onClick={() => navigate("/admin/activities")} className="w-fit">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Activities
           </Button>
           <div>
-            <h1 className="text-2xl font-semibold text-gray-900">{activity.title}</h1>
+            <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">{activity.title}</h1>
             <p className="text-sm text-gray-600 mt-1">Activity Details</p>
           </div>
         </div>
-        <div className="flex items-center space-x-3">
-          <Button variant="outline">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          <Button variant="outline" className="flex-1 sm:flex-none">
             <Share2 className="w-4 h-4 mr-2" />
             Share
           </Button>
-          <Button variant="outline">
+          <Button variant="outline" className="flex-1 sm:flex-none">
             <Download className="w-4 h-4 mr-2" />
             Export
           </Button>
-          <Button onClick={handleEdit}>
+          <Button onClick={handleEdit} className="flex-1 sm:flex-none">
             <Edit className="w-4 h-4 mr-2" />
             Edit Activity
           </Button>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button variant="destructive">
+              <Button variant="destructive" className="flex-1 sm:flex-none">
                 <Trash2 className="w-4 h-4 mr-2" />
                 Delete
               </Button>
@@ -230,9 +230,9 @@ const ActivityDetails = () => {
                   Are you sure you want to delete this activity? This action cannot be undone.
                 </AlertDialogDescription>
               </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={handleDelete} className="bg-red-600 hover:bg-red-700">
+              <AlertDialogFooter className="flex-col space-y-2 sm:flex-row sm:justify-end sm:space-x-2 sm:space-y-0">
+                <AlertDialogCancel className="w-full sm:w-auto">Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleDelete} className="w-full sm:w-auto bg-red-600 hover:bg-red-700">
                   Delete
                 </AlertDialogAction>
               </AlertDialogFooter>
@@ -241,13 +241,13 @@ const ActivityDetails = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Main Content */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="lg:col-span-2 space-y-4 sm:space-y-6">
           {/* Activity Overview */}
           <Card>
             <CardHeader>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
                 <CardTitle>Activity Overview</CardTitle>
                 {getStatusBadge()}
               </div>
@@ -260,7 +260,7 @@ const ActivityDetails = () => {
 
               <Separator />
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="flex items-center space-x-2">
                   <DollarSign className="w-4 h-4 text-green-500" />
                   <div>
@@ -330,18 +330,18 @@ const ActivityDetails = () => {
                 <div className="space-y-4">
                   {activity.time_slots.map((slot, index) => (
                     <div key={slot.id} className="border rounded-lg p-4 bg-gray-50">
-                      <div className="flex items-center justify-between mb-2">
+                      <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 mb-2">
                         <h4 className="font-medium text-gray-900">Time Slot {index + 1}</h4>
                         <Badge variant="outline">{calculateDuration(slot.starts_at, slot.ends_at)}</Badge>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                         <div>
                           <p className="text-gray-600">Starts</p>
-                          <p className="font-medium">{formatDate(slot.starts_at)}</p>
+                          <p className="font-medium break-words">{formatDate(slot.starts_at)}</p>
                         </div>
                         <div>
                           <p className="text-gray-600">Ends</p>
-                          <p className="font-medium">{formatDate(slot.ends_at)}</p>
+                          <p className="font-medium break-words">{formatDate(slot.ends_at)}</p>
                         </div>
                       </div>
                     </div>
@@ -353,7 +353,7 @@ const ActivityDetails = () => {
         </div>
 
         {/* Sidebar */}
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           {/* Package Information */}
           <Card>
             <CardHeader>

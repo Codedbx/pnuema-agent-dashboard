@@ -153,27 +153,27 @@ const CreateUser = () => {
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto space-y-6">
+    <div className="p-4 sm:p-6 max-w-4xl mx-auto space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
+      <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+        <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-4">
           <Button
             variant="outline"
             size="sm"
             onClick={() => navigate("/admin/user-access")}
-            className="flex items-center space-x-2"
+            className="flex items-center space-x-2 w-fit"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Users</span>
           </Button>
           <div>
-            <h1 className="text-2xl font-semibold text-gray-900">Create New User</h1>
+            <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">Create New User</h1>
             <p className="text-sm text-gray-600 mt-1">Add a new user to the system with appropriate role</p>
           </div>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
         {/* Basic Information Card */}
         <Card>
           <CardHeader>
@@ -248,20 +248,20 @@ const CreateUser = () => {
                 </div>
                 {errors.phone && <p className="text-sm text-red-600 mt-1">{errors.phone}</p>}
               </div>
+            </div>
 
-              {/* CAC Registration Number */}
-              <div className="md:col-span-2">
-                <Label htmlFor="cacRegNo">CAC Reg. No</Label>
-                <div className="relative">
-                  <CreditCard className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                  <Input
-                    id="cacRegNo"
-                    value={formData.cacRegNo}
-                    onChange={(e) => handleInputChange("cacRegNo", e.target.value)}
-                    placeholder="Enter CAC registration number"
-                    className="pl-10"
-                  />
-                </div>
+            {/* CAC Registration Number */}
+            <div>
+              <Label htmlFor="cacRegNo">CAC Reg. No</Label>
+              <div className="relative">
+                <CreditCard className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <Input
+                  id="cacRegNo"
+                  value={formData.cacRegNo}
+                  onChange={(e) => handleInputChange("cacRegNo", e.target.value)}
+                  placeholder="Enter CAC registration number"
+                  className="pl-10"
+                />
               </div>
             </div>
           </CardContent>
@@ -372,7 +372,7 @@ const CreateUser = () => {
             {/* Role Preview */}
             {formData.role && (
               <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                <div className="flex items-center space-x-3">
+                <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-3">
                   <span className="text-sm font-medium text-gray-700">Selected Role:</span>
                   <Badge variant="secondary" className={getRoleColor(formData.role)}>
                     {React.createElement(getRoleIcon(formData.role), { className: "w-3 h-3 mr-1" })}
@@ -429,7 +429,7 @@ const CreateUser = () => {
 
             {/* Settings */}
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
                 <div className="space-y-0.5">
                   <Label>Active User</Label>
                   <p className="text-sm text-gray-500">User can log in and access the system</p>
@@ -440,7 +440,7 @@ const CreateUser = () => {
                 />
               </div>
 
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
                 <div className="space-y-0.5">
                   <Label>Send Welcome Email</Label>
                   <p className="text-sm text-gray-500">Send login credentials via email</p>
@@ -455,16 +455,17 @@ const CreateUser = () => {
         </Card>
 
         {/* Action Buttons */}
-        <div className="flex items-center justify-end space-x-4 pt-6">
+        <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-end sm:space-y-0 sm:space-x-4 pt-4 sm:pt-6">
           <Button
             type="button"
             variant="outline"
             onClick={() => navigate("/admin/user-access")}
             disabled={isSubmitting}
+            className="w-full sm:w-auto"
           >
             Cancel
           </Button>
-          <Button type="submit" disabled={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
             {isSubmitting ? (
               <>
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />

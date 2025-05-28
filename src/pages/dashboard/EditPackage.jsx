@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
-import { ArrowLeft, Save, Upload, X, Plus, Trash2, Users, Calendar, MapPin, DollarSign } from 'lucide-react'
+import { ArrowLeft, Save, Upload, X, Plus, Trash2, Users, Calendar, MapPin, DollarSign } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -26,6 +26,25 @@ const EditPackage = () => {
 
   // Mock data - replace with actual API call
   const mockPackages = {
+    2: {
+      id: 2,
+      title: "Hello",
+      description: "This is a title",
+      base_price: "2999.00",
+      check_in_time: "2025-05-25T14:57:29.000000Z",
+      check_out_time: "2025-05-25T14:57:29.000000Z",
+      booking_start_date: "2025-05-25T14:57:29.000000Z",
+      booking_end_date: "2025-05-25T14:57:29.000000Z",
+      is_active: true,
+      is_featured: false,
+      is_refundable: true,
+      terms_and_conditions: "fafjdkf ajfkhj",
+      cancellation_policy: "cancel",
+      location: "nigeria",
+      owner_id: 1,
+      visibility: "public",
+      activities: [],
+    },
     3: {
       id: 3,
       title: "Luxury Paris Getaway",
@@ -57,6 +76,57 @@ const EditPackage = () => {
           price: "500.00",
         },
       ],
+    },
+    5: {
+      id: 5,
+      title: "Alaskan Adventure Package",
+      description: "10-day wildlife tour with glacier hikes and whale watching",
+      base_price: "1899.95",
+      check_in_time: "2025-08-10T12:00:00.000000Z",
+      check_out_time: "2025-08-20T10:00:00.000000Z",
+      booking_start_date: "2025-07-01T00:00:00.000000Z",
+      booking_end_date: "2025-07-31T23:59:59.000000Z",
+      is_active: true,
+      is_featured: true,
+      is_refundable: false,
+      terms_and_conditions: "Weather-dependent activities",
+      cancellation_policy: "No refunds for weather cancellations",
+      location: "Anchorage, Alaska",
+      owner_id: 1,
+      visibility: "public",
+      activities: [
+        {
+          id: 1,
+          title: "hiking",
+          description: "on the mountiains",
+          price: "500.00",
+        },
+        {
+          id: 2,
+          title: "Swimming",
+          description: "going swimming at the beach",
+          price: "600.00",
+        },
+      ],
+    },
+    6: {
+      id: 6,
+      title: "Tokyo City Experience",
+      description: "4-day cultural immersion with sushi class and temple tours",
+      base_price: "1299.50",
+      check_in_time: "2025-09-01T16:00:00.000000Z",
+      check_out_time: "2025-09-05T11:00:00.000000Z",
+      booking_start_date: "2025-08-01T00:00:00.000000Z",
+      booking_end_date: "2025-08-25T23:59:59.000000Z",
+      is_active: true,
+      is_featured: true,
+      is_refundable: true,
+      terms_and_conditions: "Valid passport required",
+      cancellation_policy: "Free date changes up to 7 days before",
+      location: "Tokyo, Japan",
+      owner_id: 1,
+      visibility: "public",
+      activities: [],
     },
   }
 
@@ -148,24 +218,24 @@ const EditPackage = () => {
   }
 
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-6">
+    <div className="p-4 sm:p-6 max-w-6xl mx-auto space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <Button variant="outline" onClick={() => navigate(`/admin/packages/${id}`)}>
+      <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+        <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-4">
+          <Button variant="outline" onClick={() => navigate(`/admin/packages/${id}`)} className="w-fit">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Details
           </Button>
           <div>
-            <h1 className="text-2xl font-semibold text-gray-900">Edit Package</h1>
+            <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">Edit Package</h1>
             <p className="text-gray-600">{packageData.title}</p>
           </div>
         </div>
-        <div className="flex items-center space-x-3">
-          <Button variant="outline" onClick={() => navigate(`/admin/packages/${id}`)}>
+        <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-3">
+          <Button variant="outline" onClick={() => navigate(`/admin/packages/${id}`)} className="w-full sm:w-auto">
             Cancel
           </Button>
-          <Button onClick={handleSave} disabled={saving}>
+          <Button onClick={handleSave} disabled={saving} className="w-full sm:w-auto">
             {saving ? (
               <>
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
@@ -181,13 +251,13 @@ const EditPackage = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Main Content */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="lg:col-span-2 space-y-4 sm:space-y-6">
           {/* Package Images */}
           <Card>
             <CardHeader>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
                 <CardTitle>Package Images</CardTitle>
                 <div className="flex items-center space-x-2">
                   <input
@@ -198,7 +268,7 @@ const EditPackage = () => {
                     className="hidden"
                     id="image-upload"
                   />
-                  <Button variant="outline" size="sm" asChild>
+                  <Button variant="outline" size="sm" asChild className="w-full sm:w-auto">
                     <label htmlFor="image-upload" className="cursor-pointer">
                       <Upload className="w-4 h-4 mr-2" />
                       Add Images
@@ -209,7 +279,7 @@ const EditPackage = () => {
             </CardHeader>
             <CardContent>
               {images.length > 0 ? (
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {images.map((image, index) => (
                     <div key={index} className="relative group">
                       <img
@@ -244,7 +314,7 @@ const EditPackage = () => {
               <CardTitle>Package Information</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="title">Package Title</Label>
                   <Input
@@ -277,7 +347,7 @@ const EditPackage = () => {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="price">Base Price ($)</Label>
                   <div className="relative">
@@ -310,7 +380,7 @@ const EditPackage = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="checkin">Check-in Date & Time</Label>
                   <div className="relative">
@@ -339,7 +409,7 @@ const EditPackage = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="booking-start">Booking Start Date</Label>
                   <Input
@@ -387,9 +457,9 @@ const EditPackage = () => {
           {/* Activities Management */}
           <Card>
             <CardHeader>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
                 <CardTitle>Package Activities</CardTitle>
-                <Button onClick={addActivity} size="sm">
+                <Button onClick={addActivity} size="sm" className="w-full sm:w-auto">
                   <Plus className="w-4 h-4 mr-2" />
                   Add Activity
                 </Button>
@@ -411,7 +481,7 @@ const EditPackage = () => {
                           <Trash2 className="w-4 h-4" />
                         </Button>
                       </div>
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                           <Label>Activity Title</Label>
                           <Input
@@ -452,7 +522,7 @@ const EditPackage = () => {
         </div>
 
         {/* Sidebar */}
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           {/* Package Settings */}
           <Card>
             <CardHeader>

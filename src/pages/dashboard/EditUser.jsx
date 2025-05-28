@@ -182,9 +182,9 @@ const EditUser = () => {
 
   if (!user) {
     return (
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         <div className="text-center">
-          <h2 className="text-2xl font-semibold text-gray-900">User Not Found</h2>
+          <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">User Not Found</h2>
           <p className="text-gray-600 mt-2">The user you're trying to edit doesn't exist.</p>
           <Button onClick={() => navigate("/admin/user-access")} className="mt-4">
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -196,31 +196,31 @@ const EditUser = () => {
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto space-y-6">
+    <div className="p-4 sm:p-6 max-w-4xl mx-auto space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <Button variant="outline" onClick={() => navigate(`/admin/users/${userId}`)}>
+      <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+        <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-4">
+          <Button variant="outline" onClick={() => navigate(`/admin/users/${userId}`)} className="w-fit">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Details
           </Button>
           <div>
-            <h1 className="text-2xl font-semibold text-gray-900">Edit User</h1>
+            <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">Edit User</h1>
             <p className="text-sm text-gray-600 mt-1">Update user information and settings</p>
           </div>
         </div>
-        <div className="flex items-center space-x-3">
-          <Button variant="outline" onClick={() => navigate(`/admin/users/${userId}`)}>
+        <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-3">
+          <Button variant="outline" onClick={() => navigate(`/admin/users/${userId}`)} className="w-full sm:w-auto">
             Cancel
           </Button>
-          <Button onClick={handleSave} disabled={saving}>
+          <Button onClick={handleSave} disabled={saving} className="w-full sm:w-auto">
             <Save className="w-4 h-4 mr-2" />
             {saving ? "Saving..." : "Save Changes"}
           </Button>
         </div>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {/* Basic Information Card */}
         <Card>
           <CardHeader>
@@ -322,7 +322,7 @@ const EditUser = () => {
             {/* Role Preview */}
             {formData.role && (
               <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                <div className="flex items-center space-x-3">
+                <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-3">
                   <span className="text-sm font-medium text-gray-700">Selected Role:</span>
                   <Badge variant="secondary" className={getRoleColor(formData.role)}>
                     {React.createElement(getRoleIcon(formData.role), { className: "w-3 h-3 mr-1" })}
@@ -416,7 +416,7 @@ const EditUser = () => {
             <Separator />
 
             {/* Account Status */}
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
               <div className="space-y-0.5">
                 <Label>Active User</Label>
                 <p className="text-sm text-gray-500">User can log in and access the system</p>
@@ -436,7 +436,7 @@ const EditUser = () => {
             <CardDescription>Preview of the updated user information</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="bg-gray-100 rounded-md p-4">
+            <div className="bg-gray-100 rounded-md p-4 overflow-x-auto">
               <pre className="text-xs font-mono text-gray-700 whitespace-pre-wrap">
                 {JSON.stringify(
                   {

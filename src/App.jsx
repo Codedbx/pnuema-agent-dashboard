@@ -12,6 +12,8 @@ import AdminDashboard from "./pages/dashboard/AdminDashboard"
 import Bookings from "./pages/dashboard/Bookings"
 import Packages from "./pages/dashboard/Packages"
 import PackageBuilder from "./pages/dashboard/PackageBuilder"
+import PackageDetails from "./pages/dashboard/PackageDetails"
+import EditPackage from "./pages/dashboard/EditPackage"
 import UserAccess from "./pages/dashboard/UserAccess"
 import UserDetails from "./pages/dashboard/UserDetails"
 import EditUser from "./pages/dashboard/EditUser"
@@ -53,7 +55,11 @@ function App() {
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboard />} />
           <Route path="bookings" element={<Bookings />} />
+
+          {/* Package Management Routes */}
           <Route path="packages" element={<Packages />} />
+          <Route path="packages/:id" element={<PackageDetails />} />
+          <Route path="packages/:id/edit" element={<EditPackage />} />
           <Route path="package-builder" element={<PackageBuilder />} />
 
           {/* User Management Routes */}
@@ -68,12 +74,14 @@ function App() {
           <Route path="roles/:roleId" element={<RoleDetails />} />
           <Route path="roles/:roleId/edit" element={<EditRole />} />
 
+          {/* Activity Management Routes */}
+          <Route path="activities" element={<Activities />} />
+          <Route path="activities/:packageId/:activityId" element={<ActivityDetails />} />
+          <Route path="activities/:packageId/:activityId/edit" element={<EditActivity />} />
+          <Route path="create-activities" element={<CreateActivities />} />
+
           {/* Other Routes */}
           <Route path="invoices" element={<Invoices />} />
-          <Route path="activities" element={<Activities />} />
-          <Route path="activities/:activityId" element={<ActivityDetails />} />
-          <Route path="activities/:activityId/edit" element={<EditActivity />} />
-          <Route path="create-activities" element={<CreateActivities />} />
         </Route>
       </Routes>
     </Router>

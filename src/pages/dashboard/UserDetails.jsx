@@ -161,9 +161,9 @@ const UserDetails = () => {
 
   if (!user) {
     return (
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         <div className="text-center">
-          <h2 className="text-2xl font-semibold text-gray-900">User Not Found</h2>
+          <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">User Not Found</h2>
           <p className="text-gray-600 mt-2">The user you're looking for doesn't exist.</p>
           <Button onClick={() => navigate("/admin/user-access")} className="mt-4">
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -175,35 +175,35 @@ const UserDetails = () => {
   }
 
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-6">
+    <div className="p-4 sm:p-6 max-w-6xl mx-auto space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <Button variant="outline" onClick={() => navigate("/admin/user-access")}>
+      <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+        <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-4">
+          <Button variant="outline" onClick={() => navigate("/admin/user-access")} className="w-fit">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Users
           </Button>
           <div>
-            <h1 className="text-2xl font-semibold text-gray-900">{user.name}</h1>
+            <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">{user.name}</h1>
             <p className="text-sm text-gray-600 mt-1">User Profile Details</p>
           </div>
         </div>
-        <div className="flex items-center space-x-3">
-          <Button variant="outline">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          <Button variant="outline" className="flex-1 sm:flex-none">
             <Share2 className="w-4 h-4 mr-2" />
             Share
           </Button>
-          <Button variant="outline">
+          <Button variant="outline" className="flex-1 sm:flex-none">
             <Download className="w-4 h-4 mr-2" />
             Export
           </Button>
-          <Button onClick={handleEdit}>
+          <Button onClick={handleEdit} className="flex-1 sm:flex-none">
             <Edit className="w-4 h-4 mr-2" />
             Edit User
           </Button>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button variant="destructive">
+              <Button variant="destructive" className="flex-1 sm:flex-none">
                 <Trash2 className="w-4 h-4 mr-2" />
                 Delete
               </Button>
@@ -216,9 +216,9 @@ const UserDetails = () => {
                   data.
                 </AlertDialogDescription>
               </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={handleDelete} className="bg-red-600 hover:bg-red-700">
+              <AlertDialogFooter className="flex-col space-y-2 sm:flex-row sm:justify-end sm:space-x-2 sm:space-y-0">
+                <AlertDialogCancel className="w-full sm:w-auto">Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleDelete} className="w-full sm:w-auto bg-red-600 hover:bg-red-700">
                   Delete
                 </AlertDialogAction>
               </AlertDialogFooter>
@@ -227,21 +227,21 @@ const UserDetails = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Main Content */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="lg:col-span-2 space-y-4 sm:space-y-6">
           {/* User Overview */}
           <Card>
             <CardHeader>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
                 <CardTitle>User Overview</CardTitle>
-                <div className="flex items-center space-x-2">
+                <div className="flex flex-wrap items-center gap-2">
                   {getRoleBadge(user.role)}
                   {getStatusBadge(user.is_active)}
                 </div>
               </div>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-4 sm:space-y-6">
               {/* Profile Section */}
               <div className="flex items-center space-x-4">
                 <div className="h-16 w-16 rounded-full bg-gray-300 flex items-center justify-center">
@@ -256,21 +256,21 @@ const UserDetails = () => {
               <Separator />
 
               {/* Contact Information */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 <div className="space-y-4">
                   <h4 className="font-medium text-gray-900">Contact Information</h4>
                   <div className="space-y-3">
-                    <div className="flex items-center space-x-3">
-                      <Mail className="w-4 h-4 text-gray-400" />
-                      <div>
+                    <div className="flex items-start space-x-3">
+                      <Mail className="w-4 h-4 text-gray-400 mt-0.5" />
+                      <div className="min-w-0 flex-1">
                         <p className="text-sm text-gray-600">Email</p>
-                        <p className="font-medium">{user.email}</p>
+                        <p className="font-medium break-all">{user.email}</p>
                       </div>
                     </div>
                     {user.phone && (
-                      <div className="flex items-center space-x-3">
-                        <Phone className="w-4 h-4 text-gray-400" />
-                        <div>
+                      <div className="flex items-start space-x-3">
+                        <Phone className="w-4 h-4 text-gray-400 mt-0.5" />
+                        <div className="min-w-0 flex-1">
                           <p className="text-sm text-gray-600">Phone</p>
                           <p className="font-medium">{user.phone}</p>
                         </div>
@@ -283,18 +283,18 @@ const UserDetails = () => {
                   <h4 className="font-medium text-gray-900">Business Information</h4>
                   <div className="space-y-3">
                     {user.business_name && (
-                      <div className="flex items-center space-x-3">
-                        <Building className="w-4 h-4 text-gray-400" />
-                        <div>
+                      <div className="flex items-start space-x-3">
+                        <Building className="w-4 h-4 text-gray-400 mt-0.5" />
+                        <div className="min-w-0 flex-1">
                           <p className="text-sm text-gray-600">Business Name</p>
                           <p className="font-medium">{user.business_name}</p>
                         </div>
                       </div>
                     )}
                     {user.cac_reg_no && (
-                      <div className="flex items-center space-x-3">
-                        <CreditCard className="w-4 h-4 text-gray-400" />
-                        <div>
+                      <div className="flex items-start space-x-3">
+                        <CreditCard className="w-4 h-4 text-gray-400 mt-0.5" />
+                        <div className="min-w-0 flex-1">
                           <p className="text-sm text-gray-600">CAC Reg. No</p>
                           <p className="font-medium">{user.cac_reg_no}</p>
                         </div>
@@ -310,7 +310,7 @@ const UserDetails = () => {
                   <Separator />
                   <div className="flex items-start space-x-3">
                     <MapPin className="w-4 h-4 text-gray-400 mt-1" />
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <p className="text-sm text-gray-600">Address</p>
                       <p className="font-medium">{user.address}</p>
                     </div>
@@ -344,18 +344,18 @@ const UserDetails = () => {
               <div className="space-y-4">
                 <div className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium">Last Login</p>
-                    <p className="text-xs text-gray-600">
+                    <p className="text-xs text-gray-600 break-words">
                       {user.last_login ? formatDate(user.last_login) : "Never logged in"}
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
                   <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium">Account Created</p>
-                    <p className="text-xs text-gray-600">{formatDate(user.created_at)}</p>
+                    <p className="text-xs text-gray-600 break-words">{formatDate(user.created_at)}</p>
                   </div>
                 </div>
               </div>
@@ -364,7 +364,7 @@ const UserDetails = () => {
         </div>
 
         {/* Sidebar */}
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           {/* Quick Actions */}
           <Card>
             <CardHeader>
@@ -398,9 +398,9 @@ const UserDetails = () => {
                       Are you sure you want to delete this user? This action cannot be undone.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleDelete} className="bg-red-600 hover:bg-red-700">
+                  <AlertDialogFooter className="flex-col space-y-2 sm:flex-row sm:justify-end sm:space-x-2 sm:space-y-0">
+                    <AlertDialogCancel className="w-full sm:w-auto">Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleDelete} className="w-full sm:w-auto bg-red-600 hover:bg-red-700">
                       Delete
                     </AlertDialogAction>
                   </AlertDialogFooter>
@@ -446,7 +446,7 @@ const UserDetails = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
                   <span className="text-sm text-gray-600">Current Role</span>
                   {getRoleBadge(user.role)}
                 </div>

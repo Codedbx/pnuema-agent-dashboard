@@ -18,6 +18,7 @@ import {
   RefreshCw,
   Users,
   Star,
+  Menu,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -58,6 +59,7 @@ const PackagesTable = () => {
   const [showFilters, setShowFilters] = useState(false)
   const [deletePackageId, setDeletePackageId] = useState(null)
   const [selectedRows, setSelectedRows] = useState(new Set())
+  const [showMobileOptions, setShowMobileOptions] = useState(false)
 
   const itemsPerPage = 10
 
@@ -83,7 +85,32 @@ const PackagesTable = () => {
         owner_id: 1,
         visibility: "public",
         activities_count: 0,
-        media: [],
+        media: [
+          {
+            id: 1,
+            url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-odZFjikqE5CAQBnoLvCsZyZYl6eRqV.png",
+            type: "image",
+            name: "Package Image 1",
+          },
+          {
+            id: 2,
+            url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-odZFjikqE5CAQBnoLvCsZyZYl6eRqV.png",
+            type: "image",
+            name: "Package Image 2",
+          },
+          {
+            id: 3,
+            url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-odZFjikqE5CAQBnoLvCsZyZYl6eRqV.png",
+            type: "image",
+            name: "Package Image 3",
+          },
+          {
+            id: 4,
+            url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-odZFjikqE5CAQBnoLvCsZyZYl6eRqV.png",
+            type: "image",
+            name: "Package Image 4",
+          },
+        ],
         activities: [],
       },
       {
@@ -104,7 +131,38 @@ const PackagesTable = () => {
         owner_id: 1,
         visibility: "public",
         activities_count: 2,
-        media: [],
+        media: [
+          {
+            id: 5,
+            url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-odZFjikqE5CAQBnoLvCsZyZYl6eRqV.png",
+            type: "image",
+            name: "Paris Image 1",
+          },
+          {
+            id: 6,
+            url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-odZFjikqE5CAQBnoLvCsZyZYl6eRqV.png",
+            type: "image",
+            name: "Paris Image 2",
+          },
+          {
+            id: 7,
+            url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-odZFjikqE5CAQBnoLvCsZyZYl6eRqV.png",
+            type: "image",
+            name: "Paris Image 3",
+          },
+          {
+            id: 8,
+            url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-odZFjikqE5CAQBnoLvCsZyZYl6eRqV.png",
+            type: "image",
+            name: "Paris Image 4",
+          },
+          {
+            id: 9,
+            url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-odZFjikqE5CAQBnoLvCsZyZYl6eRqV.png",
+            type: "image",
+            name: "Paris Image 5",
+          },
+        ],
         activities: [
           {
             id: 2,
@@ -157,7 +215,26 @@ const PackagesTable = () => {
         owner_id: 1,
         visibility: "public",
         activities_count: 2,
-        media: [],
+        media: [
+          {
+            id: 10,
+            url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-odZFjikqE5CAQBnoLvCsZyZYl6eRqV.png",
+            type: "image",
+            name: "Alaska Image 1",
+          },
+          {
+            id: 11,
+            url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-odZFjikqE5CAQBnoLvCsZyZYl6eRqV.png",
+            type: "image",
+            name: "Alaska Image 2",
+          },
+          {
+            id: 12,
+            url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-odZFjikqE5CAQBnoLvCsZyZYl6eRqV.png",
+            type: "image",
+            name: "Alaska Image 3",
+          },
+        ],
         activities: [
           {
             id: 1,
@@ -210,7 +287,20 @@ const PackagesTable = () => {
         owner_id: 1,
         visibility: "public",
         activities_count: 0,
-        media: [],
+        media: [
+          {
+            id: 13,
+            url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-odZFjikqE5CAQBnoLvCsZyZYl6eRqV.png",
+            type: "image",
+            name: "Tokyo Image 1",
+          },
+          {
+            id: 14,
+            url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-odZFjikqE5CAQBnoLvCsZyZYl6eRqV.png",
+            type: "image",
+            name: "Tokyo Image 2",
+          },
+        ],
         activities: [],
       },
     ],
@@ -342,6 +432,38 @@ const PackagesTable = () => {
     return <Badge variant="secondary">Inactive</Badge>
   }
 
+  const renderImagesColumn = (media) => {
+    if (!media || media.length === 0) {
+      return (
+        <div className="flex items-center justify-center w-16 h-12 bg-gray-100 rounded border-2 border-dashed border-gray-300">
+          <span className="text-xs text-gray-400">No images</span>
+        </div>
+      )
+    }
+
+    const displayImages = media.slice(0, 2) // Show first 2 images
+    const remainingCount = media.length - displayImages.length
+
+    return (
+      <div className="flex items-center space-x-1">
+        {displayImages.map((image, index) => (
+          <div key={image.id} className="relative">
+            <img
+              src={image.url || "/placeholder.svg?height=40&width=40"}
+              alt={image.name || `Package image ${index + 1}`}
+              className="w-10 h-10 object-cover rounded border border-gray-200"
+            />
+          </div>
+        ))}
+        {remainingCount > 0 && (
+          <div className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded border border-gray-200">
+            <span className="text-xs font-medium text-gray-600">+{remainingCount}</span>
+          </div>
+        )}
+      </div>
+    )
+  }
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -354,48 +476,64 @@ const PackagesTable = () => {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900">Travel Packages</h1>
+          <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">Travel Packages</h1>
           <p className="text-sm text-gray-600 mt-1">
             Manage your travel packages and bookings ({filteredPackages.length} total)
           </p>
         </div>
-        <div className="flex items-center space-x-3">
-          <Button variant="outline" onClick={handleRefresh}>
-            <RefreshCw className="w-4 h-4 mr-2" />
-            Refresh
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          {/* Mobile menu button */}
+          <Button
+            variant="outline"
+            size="sm"
+            className="sm:hidden"
+            onClick={() => setShowMobileOptions(!showMobileOptions)}
+          >
+            <Menu className="h-4 w-4 mr-2" />
+            Options
           </Button>
-          <Button variant="outline">
-            <Download className="w-4 h-4 mr-2" />
-            Export
-          </Button>
-          <Button onClick={() => navigate("/admin/package-builder")}>
-            <Plus className="w-4 h-4 mr-2" />
-            Create Package
-          </Button>
+
+          {/* Desktop buttons / Mobile dropdown */}
+          <div
+            className={`${showMobileOptions ? "flex" : "hidden"} flex-col w-full space-y-2 sm:flex sm:flex-row sm:w-auto sm:space-y-0 sm:space-x-3`}
+          >
+            <Button variant="outline" onClick={handleRefresh} className="w-full sm:w-auto">
+              <RefreshCw className="w-4 h-4 mr-2" />
+              Refresh
+            </Button>
+            <Button variant="outline" className="w-full sm:w-auto">
+              <Download className="w-4 h-4 mr-2" />
+              Export
+            </Button>
+            <Button onClick={() => navigate("/admin/package-builder")} className="w-full sm:w-auto">
+              <Plus className="w-4 h-4 mr-2" />
+              Create Package
+            </Button>
+          </div>
         </div>
       </div>
 
       {/* Filters and Search */}
       <div className="bg-white rounded-lg border border-gray-200 p-4">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
-          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
-            <div className="relative">
+        <div className="flex flex-col space-y-4 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
+          <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-4">
+            <div className="relative w-full sm:w-auto">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <Input
                 type="text"
                 placeholder="Search packages, locations..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 w-full sm:w-80"
+                className="pl-10 w-full"
               />
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline">
+                <Button variant="outline" className="w-full sm:w-auto">
                   <Filter className="w-4 h-4 mr-2" />
                   Filters
                   <ChevronDown className="w-4 h-4 ml-2" />
@@ -411,9 +549,9 @@ const PackagesTable = () => {
             </DropdownMenu>
           </div>
 
-          <div className="flex items-center space-x-4">
-            <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-48">
+          <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-4">
+            <Select value={sortBy} onValueChange={setSortBy} className="w-full sm:w-48">
+              <SelectTrigger>
                 <SelectValue placeholder="Sort by..." />
               </SelectTrigger>
               <SelectContent>
@@ -426,8 +564,13 @@ const PackagesTable = () => {
                 <SelectItem value="check_in_time">Sort by Check-in Date</SelectItem>
               </SelectContent>
             </Select>
-            <Button variant="outline" size="sm" onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}>
-              {sortOrder === "asc" ? "↑" : "↓"}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+              className="w-full sm:w-auto"
+            >
+              {sortOrder === "asc" ? "↑ Ascending" : "↓ Descending"}
             </Button>
           </div>
         </div>
@@ -463,13 +606,13 @@ const PackagesTable = () => {
       {/* Bulk Actions */}
       {selectedRows.size > 0 && (
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
             <span className="text-sm font-medium text-blue-900">{selectedRows.size} packages selected</span>
-            <div className="flex space-x-2">
-              <Button variant="destructive" size="sm">
+            <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
+              <Button variant="destructive" size="sm" className="w-full sm:w-auto">
                 Delete Selected
               </Button>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" className="w-full sm:w-auto">
                 Export Selected
               </Button>
             </div>
@@ -483,37 +626,40 @@ const PackagesTable = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="w-12 px-6 py-3 text-left">
+                <th className="w-12 px-3 sm:px-6 py-3 text-left">
                   <Checkbox
                     checked={selectedRows.size === currentPackages.length && currentPackages.length > 0}
                     onCheckedChange={handleSelectAll}
                   />
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Images
+                </th>
+                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Package
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Location
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Price
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Activities
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="hidden md:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Visibility
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="hidden md:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Refundable
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="hidden md:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Check-in
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-3 sm:px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
@@ -524,59 +670,64 @@ const PackagesTable = () => {
                   key={pkg.id}
                   className={`${selectedRows.has(pkg.id) ? "bg-blue-50" : ""} hover:bg-gray-50 transition-colors`}
                 >
-                  <td className="px-6 py-4">
+                  <td className="px-3 sm:px-6 py-4">
                     <Checkbox checked={selectedRows.has(pkg.id)} onCheckedChange={() => handleSelectRow(pkg.id)} />
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap">{renderImagesColumn(pkg.media)}</td>
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
                     <div>
                       <div className="text-sm font-medium text-gray-900">{pkg.title}</div>
-                      <div className="text-sm text-gray-500 truncate max-w-xs">{pkg.description}</div>
+                      <div className="text-xs sm:text-sm text-gray-500 truncate max-w-[100px] sm:max-w-xs">
+                        {pkg.description}
+                      </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
-                      <MapPin className="w-4 h-4 text-red-500 mr-2" />
-                      <span className="text-sm text-gray-900">{pkg.location}</span>
+                      <MapPin className="w-4 h-4 text-red-500 mr-1 sm:mr-2" />
+                      <span className="text-xs sm:text-sm text-gray-900">{pkg.location}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
-                      <DollarSign className="w-4 h-4 text-green-500 mr-1" />
-                      <span className="text-sm font-medium text-gray-900">{formatPrice(pkg.base_price)}</span>
+                      <DollarSign className="w-4 h-4 text-green-500 mr-0 sm:mr-1" />
+                      <span className="text-xs sm:text-sm font-medium text-gray-900">
+                        {formatPrice(pkg.base_price)}
+                      </span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <Badge variant={pkg.activities_count > 0 ? "default" : "secondary"}>
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
+                    <Badge variant={pkg.activities_count > 0 ? "default" : "secondary"} className="text-xs">
                       <Users className="w-3 h-3 mr-1" />
-                      {pkg.activities_count} activit{pkg.activities_count !== 1 ? "ies" : "y"}
+                      {pkg.activities_count}
                     </Badge>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <Badge variant="outline" className="capitalize">
+                  <td className="hidden md:table-cell px-3 sm:px-6 py-4 whitespace-nowrap">
+                    <Badge variant="outline" className="capitalize text-xs">
                       {pkg.visibility}
                     </Badge>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="hidden md:table-cell px-3 sm:px-6 py-4 whitespace-nowrap">
                     <Badge
                       variant={pkg.is_refundable ? "default" : "secondary"}
-                      className={pkg.is_refundable ? "bg-green-100 text-green-800" : ""}
+                      className={`text-xs ${pkg.is_refundable ? "bg-green-100 text-green-800" : ""}`}
                     >
                       {pkg.is_refundable ? "Yes" : "No"}
                     </Badge>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">{getStatusBadge(pkg)}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap">{getStatusBadge(pkg)}</td>
+                  <td className="hidden md:table-cell px-3 sm:px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <Calendar className="w-4 h-4 text-blue-500 mr-2" />
-                      <span className="text-sm text-gray-900">{formatDate(pkg.check_in_time)}</span>
+                      <span className="text-xs sm:text-sm text-gray-900">{formatDate(pkg.check_in_time)}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="sm">
-                          Actions
-                          <ChevronDown className="w-4 h-4 ml-1" />
+                        <Button variant="ghost" size="sm" className="h-8 px-2 sm:px-4">
+                          <span className="hidden sm:inline">Actions</span>
+                          <ChevronDown className="w-4 h-4 sm:ml-1" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
@@ -612,19 +763,26 @@ const PackagesTable = () => {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-            <div className="flex-1 flex justify-between sm:hidden">
+          <div className="bg-white px-4 py-3 flex flex-col sm:flex-row items-center justify-between border-t border-gray-200 sm:px-6">
+            <div className="flex flex-1 justify-between w-full sm:hidden">
               <Button
                 variant="outline"
                 onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                 disabled={currentPage === 1}
+                className="w-24"
               >
                 Previous
               </Button>
+              <div className="flex items-center justify-center px-4">
+                <span className="text-sm text-gray-700">
+                  Page {currentPage} of {totalPages}
+                </span>
+              </div>
               <Button
                 variant="outline"
                 onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                 disabled={currentPage === totalPages}
+                className="w-24"
               >
                 Next
               </Button>
@@ -692,9 +850,9 @@ const PackagesTable = () => {
               associated activities.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDelete} className="bg-red-600 hover:bg-red-700">
+          <AlertDialogFooter className="flex-col space-y-2 sm:flex-row sm:justify-end sm:space-x-2 sm:space-y-0">
+            <AlertDialogCancel className="w-full sm:w-auto">Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete} className="w-full sm:w-auto bg-red-600 hover:bg-red-700">
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>

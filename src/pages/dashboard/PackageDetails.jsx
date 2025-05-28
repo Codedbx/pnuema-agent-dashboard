@@ -2,7 +2,20 @@
 
 import { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
-import { ArrowLeft, Edit, MapPin, DollarSign, Calendar, Users, Star, Shield, Eye, Upload, X, Download } from 'lucide-react'
+import {
+  ArrowLeft,
+  Edit,
+  MapPin,
+  DollarSign,
+  Calendar,
+  Users,
+  Star,
+  Shield,
+  Eye,
+  Upload,
+  X,
+  Download,
+} from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -92,6 +105,80 @@ const PackageDetails = () => {
         },
       ],
     },
+    5: {
+      id: 5,
+      title: "Alaskan Adventure Package",
+      description: "10-day wildlife tour with glacier hikes and whale watching",
+      base_price: "1899.95",
+      check_in_time: "2025-08-10T12:00:00.000000Z",
+      check_out_time: "2025-08-20T10:00:00.000000Z",
+      booking_start_date: "2025-07-01T00:00:00.000000Z",
+      booking_end_date: "2025-07-31T23:59:59.000000Z",
+      is_active: true,
+      is_featured: true,
+      is_refundable: false,
+      terms_and_conditions: "Weather-dependent activities",
+      cancellation_policy: "No refunds for weather cancellations",
+      location: "Anchorage, Alaska",
+      owner_id: 1,
+      visibility: "public",
+      activities_count: 2,
+      media: [],
+      activities: [
+        {
+          id: 1,
+          title: "hiking",
+          description: "on the mountiains",
+          price: "500.00",
+          time_slots: [
+            {
+              id: 3,
+              starts_at: "2025-05-28T16:36:10.000000Z",
+              ends_at: "2025-05-31T16:36:10.000000Z",
+            },
+          ],
+        },
+        {
+          id: 2,
+          title: "Swimming",
+          description: "going swimming at the beach",
+          price: "600.00",
+          time_slots: [
+            {
+              id: 1,
+              starts_at: "2025-05-25T17:34:32.000000Z",
+              ends_at: "2025-05-25T17:34:32.000000Z",
+            },
+            {
+              id: 2,
+              starts_at: "2025-05-28T16:34:59.000000Z",
+              ends_at: "2025-05-31T16:34:59.000000Z",
+            },
+          ],
+        },
+      ],
+    },
+    6: {
+      id: 6,
+      title: "Tokyo City Experience",
+      description: "4-day cultural immersion with sushi class and temple tours",
+      base_price: "1299.50",
+      check_in_time: "2025-09-01T16:00:00.000000Z",
+      check_out_time: "2025-09-05T11:00:00.000000Z",
+      booking_start_date: "2025-08-01T00:00:00.000000Z",
+      booking_end_date: "2025-08-25T23:59:59.000000Z",
+      is_active: true,
+      is_featured: true,
+      is_refundable: true,
+      terms_and_conditions: "Valid passport required",
+      cancellation_policy: "Free date changes up to 7 days before",
+      location: "Tokyo, Japan",
+      owner_id: 1,
+      visibility: "public",
+      activities_count: 0,
+      media: [],
+      activities: [],
+    },
   }
 
   useEffect(() => {
@@ -178,38 +265,38 @@ const PackageDetails = () => {
   }
 
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-6">
+    <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <Button variant="outline" onClick={() => navigate("/admin/packages")}>
+      <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+        <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-4">
+          <Button variant="outline" onClick={() => navigate("/admin/packages")} className="w-fit">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Packages
           </Button>
           <div>
-            <h1 className="text-2xl font-semibold text-gray-900">{packageData.title}</h1>
+            <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">{packageData.title}</h1>
             <p className="text-gray-600">Package ID: {packageData.id}</p>
           </div>
         </div>
-        <div className="flex items-center space-x-3">
-          <Button variant="outline">
+        <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-3">
+          <Button variant="outline" className="w-full sm:w-auto">
             <Download className="w-4 h-4 mr-2" />
             Export Details
           </Button>
-          <Button onClick={() => navigate(`/admin/packages/${id}/edit`)}>
+          <Button onClick={() => navigate(`/admin/packages/${id}/edit`)} className="w-full sm:w-auto">
             <Edit className="w-4 h-4 mr-2" />
             Edit Package
           </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Main Content */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="lg:col-span-2 space-y-4 sm:space-y-6">
           {/* Package Images */}
           <Card>
             <CardHeader>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
                 <CardTitle>Package Images</CardTitle>
                 <div className="flex items-center space-x-2">
                   <input
@@ -220,7 +307,7 @@ const PackageDetails = () => {
                     className="hidden"
                     id="image-upload"
                   />
-                  <Button variant="outline" size="sm" asChild>
+                  <Button variant="outline" size="sm" asChild className="w-full sm:w-auto">
                     <label htmlFor="image-upload" className="cursor-pointer">
                       <Upload className="w-4 h-4 mr-2" />
                       Add Images
@@ -231,7 +318,7 @@ const PackageDetails = () => {
             </CardHeader>
             <CardContent>
               {images.length > 0 ? (
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {images.map((image, index) => (
                     <div key={index} className="relative group">
                       <img
@@ -271,7 +358,7 @@ const PackageDetails = () => {
                 <p className="text-sm text-gray-900 mt-1">{packageData.description}</p>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label className="text-sm font-medium text-gray-700">Location</Label>
                   <div className="flex items-center mt-1">
@@ -288,31 +375,35 @@ const PackageDetails = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label className="text-sm font-medium text-gray-700">Check-in</Label>
                   <div className="flex items-center mt-1">
                     <Calendar className="w-4 h-4 text-blue-500 mr-2" />
-                    <span className="text-sm text-gray-900">{formatDate(packageData.check_in_time)}</span>
+                    <span className="text-xs sm:text-sm text-gray-900">{formatDate(packageData.check_in_time)}</span>
                   </div>
                 </div>
                 <div>
                   <Label className="text-sm font-medium text-gray-700">Check-out</Label>
                   <div className="flex items-center mt-1">
                     <Calendar className="w-4 h-4 text-blue-500 mr-2" />
-                    <span className="text-sm text-gray-900">{formatDate(packageData.check_out_time)}</span>
+                    <span className="text-xs sm:text-sm text-gray-900">{formatDate(packageData.check_out_time)}</span>
                   </div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label className="text-sm font-medium text-gray-700">Booking Start</Label>
-                  <span className="text-sm text-gray-900 block mt-1">{formatDate(packageData.booking_start_date)}</span>
+                  <span className="text-xs sm:text-sm text-gray-900 block mt-1">
+                    {formatDate(packageData.booking_start_date)}
+                  </span>
                 </div>
                 <div>
                   <Label className="text-sm font-medium text-gray-700">Booking End</Label>
-                  <span className="text-sm text-gray-900 block mt-1">{formatDate(packageData.booking_end_date)}</span>
+                  <span className="text-xs sm:text-sm text-gray-900 block mt-1">
+                    {formatDate(packageData.booking_end_date)}
+                  </span>
                 </div>
               </div>
 
@@ -340,7 +431,7 @@ const PackageDetails = () => {
                 <div className="space-y-4">
                   {packageData.activities.map((activity) => (
                     <div key={activity.id} className="border rounded-lg p-4">
-                      <div className="flex items-start justify-between">
+                      <div className="flex flex-col space-y-2 sm:flex-row sm:items-start sm:justify-between sm:space-y-0">
                         <div className="flex-1">
                           <h4 className="font-medium text-gray-900">{activity.title}</h4>
                           <p className="text-sm text-gray-600 mt-1">{activity.description}</p>
@@ -349,7 +440,7 @@ const PackageDetails = () => {
                             <span className="text-sm font-medium text-green-600">{formatPrice(activity.price)}</span>
                           </div>
                         </div>
-                        <Badge variant="outline">
+                        <Badge variant="outline" className="self-start sm:ml-2">
                           <Users className="w-3 h-3 mr-1" />
                           {activity.time_slots?.length || 0} slots
                         </Badge>
@@ -363,7 +454,7 @@ const PackageDetails = () => {
         </div>
 
         {/* Sidebar */}
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           {/* Status Card */}
           <Card>
             <CardHeader>
