@@ -1,7 +1,6 @@
 "use client"
 
 import React from "react"
-
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import {
@@ -17,6 +16,7 @@ import {
   Users,
   Shield,
   Crown,
+  MapPin,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -34,6 +34,7 @@ const CreateUser = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  // Removed permissions and department from form data
   const [formData, setFormData] = useState({
     // Basic Information
     businessName: "",
@@ -44,10 +45,8 @@ const CreateUser = () => {
     phone: "",
     cacRegNo: "",
 
-    // Role & Permissions
+    // Role
     role: "",
-    permission: "",
-    department: "",
 
     // Additional Information
     address: "",
@@ -82,7 +81,6 @@ const CreateUser = () => {
     if (!formData.password) newErrors.password = "Password is required"
     if (!formData.confirmPassword) newErrors.confirmPassword = "Please confirm password"
     if (!formData.role) newErrors.role = "Role is required"
-    if (!formData.permission) newErrors.permission = "Permission is required"
 
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -170,9 +168,7 @@ const CreateUser = () => {
           </Button>
           <div>
             <h1 className="text-2xl font-semibold text-gray-900">Create New User</h1>
-            <p className="text-sm text-gray-600 mt-1">
-              Add a new user to the system with appropriate roles and permissions
-            </p>
+            <p className="text-sm text-gray-600 mt-1">Add a new user to the system with appropriate role</p>
           </div>
         </div>
       </div>
@@ -326,81 +322,51 @@ const CreateUser = () => {
           </CardContent>
         </Card>
 
-        {/* Role & Permissions Card */}
+        {/* Role Card (removed permissions and department) */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
               <Shield className="w-5 h-5" />
-              <span>Role & Permissions</span>
+              <span>User Role</span>
             </CardTitle>
-            <CardDescription>Define the user's role and access permissions</CardDescription>
+            <CardDescription>Define the user's role and access level</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {/* Role */}
-              <div>
-                <Label htmlFor="role">Role *</Label>
-                <Select value={formData.role} onValueChange={(value) => handleInputChange("role", value)}>
-                  <SelectTrigger className={errors.role ? "border-red-500" : ""}>
-                    <SelectValue placeholder="Select role" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="admin">
-                      <div className="flex items-center space-x-2">
-                        <Crown className="w-4 h-4 text-red-600" />
-                        <span>Admin</span>
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="manager">
-                      <div className="flex items-center space-x-2">
-                        <Shield className="w-4 h-4 text-blue-600" />
-                        <span>Manager</span>
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="user">
-                      <div className="flex items-center space-x-2">
-                        <Users className="w-4 h-4 text-green-600" />
-                        <span>User</span>
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="viewer">
-                      <div className="flex items-center space-x-2">
-                        <Eye className="w-4 h-4 text-gray-600" />
-                        <span>Viewer</span>
-                      </div>
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-                {errors.role && <p className="text-sm text-red-600 mt-1">{errors.role}</p>}
-              </div>
-
-              {/* Permission */}
-              <div>
-                <Label htmlFor="permission">Permission *</Label>
-                <Select value={formData.permission} onValueChange={(value) => handleInputChange("permission", value)}>
-                  <SelectTrigger className={errors.permission ? "border-red-500" : ""}>
-                    <SelectValue placeholder="Select permission" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="admin">Full Access</SelectItem>
-                    <SelectItem value="write">Read & Write</SelectItem>
-                    <SelectItem value="read">Read Only</SelectItem>
-                    <SelectItem value="custom">Custom</SelectItem>
-                  </SelectContent>
-                </Select>
-                {errors.permission && <p className="text-sm text-red-600 mt-1">{errors.permission}</p>}
-              </div>
-
-              {/* Department */}
-              <div>
-                <Label htmlFor="department">Department</Label>
-                <Input
-                  id="department"
-                  value={formData.department}
-                  onChange={(e) => handleInputChange("department", e.target.value)}
-                  placeholder="Enter department"
-                />
-              </div>
+            {/* Role */}
+            <div>
+              <Label htmlFor="role">Role *</Label>
+              <Select value={formData.role} onValueChange={(value) => handleInputChange("role", value)}>
+                <SelectTrigger className={errors.role ? "border-red-500" : ""}>
+                  <SelectValue placeholder="Select role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="admin">
+                    <div className="flex items-center space-x-2">
+                      <Crown className="w-4 h-4 text-red-600" />
+                      <span>Admin</span>
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="manager">
+                    <div className="flex items-center space-x-2">
+                      <Shield className="w-4 h-4 text-blue-600" />
+                      <span>Manager</span>
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="user">
+                    <div className="flex items-center space-x-2">
+                      <Users className="w-4 h-4 text-green-600" />
+                      <span>User</span>
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="viewer">
+                    <div className="flex items-center space-x-2">
+                      <Eye className="w-4 h-4 text-gray-600" />
+                      <span>Viewer</span>
+                    </div>
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+              {errors.role && <p className="text-sm text-red-600 mt-1">{errors.role}</p>}
             </div>
 
             {/* Role Preview */}
@@ -412,17 +378,12 @@ const CreateUser = () => {
                     {React.createElement(getRoleIcon(formData.role), { className: "w-3 h-3 mr-1" })}
                     {formData.role.charAt(0).toUpperCase() + formData.role.slice(1)}
                   </Badge>
-                  {formData.permission && (
-                    <>
-                      <span className="text-gray-400">•</span>
-                      <Badge variant="outline">
-                        {formData.permission === "admin" && "Full Access"}
-                        {formData.permission === "write" && "Read & Write"}
-                        {formData.permission === "read" && "Read Only"}
-                        {formData.permission === "custom" && "Custom"}
-                      </Badge>
-                    </>
-                  )}
+                </div>
+                <div className="mt-2 text-xs text-gray-500">
+                  {formData.role === "admin" && "Full system access with all administrative privileges"}
+                  {formData.role === "manager" && "Management access with team oversight capabilities"}
+                  {formData.role === "user" && "Standard user access with basic functionality"}
+                  {formData.role === "viewer" && "Read-only access to view information"}
                 </div>
               </div>
             )}
@@ -439,13 +400,17 @@ const CreateUser = () => {
             {/* Address */}
             <div>
               <Label htmlFor="address">Address</Label>
-              <Textarea
-                id="address"
-                value={formData.address}
-                onChange={(e) => handleInputChange("address", e.target.value)}
-                placeholder="Enter address"
-                rows={3}
-              />
+              <div className="relative">
+                <MapPin className="absolute left-3 top-3 text-gray-400 w-4 h-4" />
+                <Textarea
+                  id="address"
+                  value={formData.address}
+                  onChange={(e) => handleInputChange("address", e.target.value)}
+                  placeholder="Enter complete address"
+                  className="pl-10"
+                  rows={3}
+                />
+              </div>
             </div>
 
             {/* Notes */}

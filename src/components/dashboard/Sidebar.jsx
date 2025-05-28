@@ -14,10 +14,12 @@ import {
   Shield,
   UserPlus,
 } from "lucide-react"
+import { Sidebar, SidebarContent, SidebarHeader, useSidebar } from "@/components/ui/sidebar"
 
 const AppSidebar = () => {
   const navigate = useNavigate()
   const location = useLocation()
+  const { isMobile, setOpenMobile } = useSidebar()
   const [openItems, setOpenItems] = useState({
     bookings: true,
     invoices: false,
@@ -29,6 +31,10 @@ const AppSidebar = () => {
   const handleNavigation = (route) => {
     if (route) {
       navigate(route)
+      // Close mobile sidebar when navigating
+      if (isMobile) {
+        setOpenMobile(false)
+      }
     }
   }
 
@@ -130,117 +136,123 @@ const AppSidebar = () => {
     },
   ]
 
-  return (
-    <div className="w-64 h-screen sticky top-0 bg-white border-r border-gray-200 flex flex-col">
-      {/* Header */}
-      <div className="flex items-center px-6 py-4 border-b border-gray-200">
-        <div className="flex items-center space-x-3">
-          <img src="/icons/bye-wind.svg" className="h-6 w-6" alt="bye-wind" />
-          <span className="text-lg font-semibold text-gray-900">ByeWind</span>
+  const SidebarContentComponent = () => (
+    <>
+      {/* Quick Actions */}
+      <div className="px-4 py-4">
+        <div className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-3 px-2">Quick Actions</div>
+        <div className="space-y-1">
+          {quickActions.map((action) => (
+            <button
+              key={action.title}
+              onClick={() => handleNavigation(action.route)}
+              className="w-full flex items-center px-3 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors"
+            >
+              <action.icon className="h-4 w-4 mr-3 text-gray-500" />
+              {action.title}
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* Content */}
-      <div className="flex-1 overflow-y-auto">
-        {/* Quick Actions */}
-        <div className="px-4 py-4">
-          <div className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-3 px-2">Quick Actions</div>
-          <div className="space-y-1">
-            {quickActions.map((action) => (
-              <button
-                key={action.title}
-                onClick={() => handleNavigation(action.route)}
-                className="w-full flex items-center px-3 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors"
-              >
-                <action.icon className="h-4 w-4 mr-3 text-gray-500" />
-                {action.title}
-              </button>
-            ))}
-          </div>
-        </div>
+      {/* Dashboards */}
+      <div className="px-4 py-4">
+        <div className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-3 px-2">Dashboards</div>
+        <div className="space-y-2.5">
+          {dashboardItems.map((item) => {
+            const Icon = item.icon
 
-        {/* Dashboards */}
-        <div className="px-4 py-4">
-          <div className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-3 px-2">Dashboards</div>
-          <div className="space-y-1">
-            {dashboardItems.map((item) => {
-              const Icon = item.icon
+            if (item.items) {
+              // Collapsible menu item
+              const parentRoutes = item.items.map((subItem) => subItem.route).filter(Boolean)
+              const isActive = isParentActive(parentRoutes)
+              const isOpen = openItems[item.key]
 
-              if (item.items) {
-                // Collapsible menu item
-                const parentRoutes = item.items.map((subItem) => subItem.route).filter(Boolean)
-                const isActive = isParentActive(parentRoutes)
-                const isOpen = openItems[item.key]
-
-                return (
-                  <div key={item.title}>
-                    <button
-                      onClick={() => toggleCollapsible(item.key)}
-                      className={`w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
-                        isActive ? "bg-blue-50 text-blue-700" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                      }`}
-                    >
-                      <div className="flex items-center">
-                        <Icon className={`h-4 w-4 mr-3 ${isActive ? "text-blue-700" : "text-gray-500"}`} />
-                        {item.title}
-                      </div>
-                      <ChevronRight
-                        className={`h-4 w-4 transition-transform ${
-                          isOpen ? "rotate-90" : ""
-                        } ${isActive ? "text-blue-700" : "text-gray-400"}`}
-                      />
-                    </button>
-
-                    {isOpen && (
-                      <div className="mt-1 ml-6 space-y-1">
-                        {item.items.map((subItem) => (
-                          <button
-                            key={subItem.title}
-                            onClick={() => handleNavigation(subItem.route)}
-                            className={`w-full flex items-center px-3 py-2 text-sm rounded-lg transition-colors ${
-                              subItem.route && isRouteActive(subItem.route)
-                                ? "bg-blue-50 text-blue-700 font-medium"
-                                : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                            }`}
-                          >
-                            <div
-                              className={`w-1.5 h-1.5 rounded-full mr-3 ${
-                                subItem.route && isRouteActive(subItem.route) ? "bg-blue-700" : "bg-gray-400"
-                              }`}
-                            />
-                            {subItem.title}
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )
-              } else {
-                // Simple menu item
-                return (
+              return (
+                <div key={item.title}>
                   <button
-                    key={item.title}
-                    onClick={() => handleNavigation(item.route)}
-                    className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
-                      item.route && isRouteActive(item.route)
-                        ? "bg-blue-50 text-blue-700"
-                        : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                    onClick={() => toggleCollapsible(item.key)}
+                    className={`w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                      isActive ? "bg-blue-50 text-blue-700" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                     }`}
                   >
-                    <Icon
-                      className={`h-4 w-4 mr-3 ${
-                        item.route && isRouteActive(item.route) ? "text-blue-700" : "text-gray-500"
-                      }`}
+                    <div className="flex items-center">
+                      <Icon className={`h-4 w-4 mr-3 ${isActive ? "text-blue-700" : "text-gray-500"}`} />
+                      {item.title}
+                    </div>
+                    <ChevronRight
+                      className={`h-4 w-4 transition-transform ${
+                        isOpen ? "rotate-90" : ""
+                      } ${isActive ? "text-blue-700" : "text-gray-400"}`}
                     />
-                    {item.title}
                   </button>
-                )
-              }
-            })}
-          </div>
+
+                  {isOpen && (
+                    <div className="mt-1 ml-6 space-y-1">
+                      {item.items.map((subItem) => (
+                        <button
+                          key={subItem.title}
+                          onClick={() => handleNavigation(subItem.route)}
+                          className={`w-full flex items-center px-3 py-2 text-sm rounded-lg transition-colors ${
+                            subItem.route && isRouteActive(subItem.route)
+                              ? "bg-blue-50 text-blue-700 font-medium"
+                              : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                          }`}
+                        >
+                          <div
+                            className={`w-1.5 h-1.5 rounded-full mr-3 ${
+                              subItem.route && isRouteActive(subItem.route) ? "bg-blue-700" : "bg-gray-400"
+                            }`}
+                          />
+                          {subItem.title}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )
+            } else {
+              // Simple menu item
+              return (
+                <button
+                  key={item.title}
+                  onClick={() => handleNavigation(item.route)}
+                  className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                    item.route && isRouteActive(item.route)
+                      ? "bg-blue-50 text-blue-700"
+                      : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                  }`}
+                >
+                  <Icon
+                    className={`h-4 w-4 mr-3 ${
+                      item.route && isRouteActive(item.route) ? "text-blue-700" : "text-gray-500"
+                    }`}
+                  />
+                  {item.title}
+                </button>
+              )
+            }
+          })}
         </div>
       </div>
-    </div>
+    </>
+  )
+
+  return (
+    <Sidebar collapsible="offcanvas" className="w-64">
+      <SidebarHeader className="border-b border-gray-200">
+        <div className="flex items-center px-6 py-4">
+          <div className="flex items-center space-x-3">
+            <img src="/icons/bye-wind.svg" className="h-6 w-6" alt="bye-wind" />
+            <span className="text-lg font-semibold text-gray-900">ByeWind</span>
+          </div>
+        </div>
+      </SidebarHeader>
+
+      <SidebarContent className="overflow-y-auto">
+        <SidebarContentComponent />
+      </SidebarContent>
+    </Sidebar>
   )
 }
 
