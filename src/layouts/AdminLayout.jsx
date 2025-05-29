@@ -21,9 +21,9 @@ const AdminLayout = () => {
             <main className={`flex-1 p-6 ${isAdminDashboard ? "max-w-none" : "max-w-7xl"}`}>
               <Outlet />
             </main>
-            {isAdminDashboard && <NotificationsPanel />}
           </div>
         </SidebarInset>
+        {isAdminDashboard && <NotificationsPanel />}
       </div>
     </SidebarProvider>
   )
