@@ -5,7 +5,7 @@ import TableComponent from "@/components/dashboard/TableComponent"
 
 const AdminDashboard = () => {
   return (
-    <div className="flex flex-col gap-4 sm:gap-6">
+    <div className="flex flex-col gap-4 sm:gap-6 pr-4">
       <DashboardStatsCards />
       <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 w-full">
         <div className="w-full lg:w-1/2">
