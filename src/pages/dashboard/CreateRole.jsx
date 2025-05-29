@@ -102,7 +102,7 @@ const CreateRole = () => {
           <CardContent className="space-y-4">
             <div className="space-y-4">
               {/* Role Name */}
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="name">Role Name *</Label>
                 <div className="relative">
                   <Input
@@ -117,7 +117,7 @@ const CreateRole = () => {
               </div>
 
               {/* Description */}
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="description">Description *</Label>
                 <Textarea
                   id="description"

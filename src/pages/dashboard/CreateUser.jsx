@@ -186,7 +186,7 @@ const CreateUser = () => {
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Business Name */}
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="businessName">Business Name</Label>
                 <div className="relative">
                   <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -201,7 +201,7 @@ const CreateUser = () => {
               </div>
 
               {/* Full Name */}
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="fullName">Full Name *</Label>
                 <div className="relative">
                   <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -217,7 +217,7 @@ const CreateUser = () => {
               </div>
 
               {/* Email Address */}
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="email">Email Address *</Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -234,7 +234,7 @@ const CreateUser = () => {
               </div>
 
               {/* Phone */}
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="phone">Phone (Optional)</Label>
                 <div className="relative">
                   <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -251,7 +251,7 @@ const CreateUser = () => {
             </div>
 
             {/* CAC Registration Number */}
-            <div>
+            <div className="space-y-2">
               <Label htmlFor="cacRegNo">CAC Reg. No</Label>
               <div className="relative">
                 <CreditCard className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -279,7 +279,7 @@ const CreateUser = () => {
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Password */}
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="password">Password *</Label>
                 <div className="relative">
                   <Key className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -303,7 +303,7 @@ const CreateUser = () => {
               </div>
 
               {/* Confirm Password */}
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="confirmPassword">Confirm Password *</Label>
                 <div className="relative">
                   <Key className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -333,7 +333,7 @@ const CreateUser = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             {/* Role */}
-            <div>
+            <div className="space-y-2">
               <Label htmlFor="role">Role *</Label>
               <Select value={formData.role} onValueChange={(value) => handleInputChange("role", value)}>
                 <SelectTrigger className={errors.role ? "border-red-500" : ""}>
@@ -398,7 +398,7 @@ const CreateUser = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             {/* Address */}
-            <div>
+            <div className="space-y-2">
               <Label htmlFor="address">Address</Label>
               <div className="relative">
                 <MapPin className="absolute left-3 top-3 text-gray-400 w-4 h-4" />
@@ -414,7 +414,7 @@ const CreateUser = () => {
             </div>
 
             {/* Notes */}
-            <div>
+            <div className="space-y-2">
               <Label htmlFor="notes">Notes</Label>
               <Textarea
                 id="notes"
