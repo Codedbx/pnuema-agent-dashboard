@@ -41,11 +41,11 @@ export function GraphComponent() {
 
   return (
     <Card className="w-full bg-slate-50/50 border-slate-200/50">
-      <CardHeader className="">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+      <CardHeader className="pb-2 sm:pb-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-2">
           <CardTitle className="text-base sm:text-lg font-medium text-slate-900">Total bookings</CardTitle>
           <div className="flex items-center gap-2 text-sm text-slate-600">
-            <span>View by:</span>
+            <span className="whitespace-nowrap">View by:</span>
             <Select defaultValue="month">
               <SelectTrigger className="w-20 h-8 text-sm border-slate-300">
                 <SelectValue />
@@ -59,47 +59,52 @@ export function GraphComponent() {
           </div>
         </div>
       </CardHeader>
-      <CardContent className="">
-        <ChartContainer config={chartConfig} className="min-h-[200px] sm:min-h-[240px] lg:min-h-[280px] w-full">
-          <BarChart data={chartData} margin={{ left: 20, right: 20, top: 20, bottom: 20 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
-            <XAxis
-              dataKey="month"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              fontSize={12}
-              className="text-slate-600"
-            />
-            <YAxis
-              tickFormatter={formatYAxis}
-              tickLine={false}
-              axisLine={false}
-              fontSize={12}
-              className="text-slate-600"
-              domain={[0, 30000000]}
-              ticks={[0, 10000000, 20000000, 30000000]}
-            />
-            <ChartTooltip
-              cursor={false}
-              content={
-                <ChartTooltipContent
-                  formatter={(value) => [formatYAxis(value), "Bookings"]}
-                  labelFormatter={(label) => `Month: ${label}`}
+      <CardContent className="px-2 sm:px-6">
+        <div className="w-full overflow-x-auto">
+          <div className="min-w-[300px]">
+            <ChartContainer config={chartConfig} className="min-h-[200px] sm:min-h-[240px] lg:min-h-[280px] w-full">
+              <BarChart data={chartData} margin={{ left: 10, right: 10, top: 20, bottom: 20 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
+                <XAxis
+                  dataKey="month"
+                  tickLine={false}
+                  tickMargin={10}
+                  axisLine={false}
+                  fontSize={12}
+                  className="text-slate-600"
                 />
-              }
-            />
-            {chartData.map((entry, index) => (
-              <Bar
-                key={entry.month}
-                dataKey="bookings"
-                fill={getBarColor(index)}
-                radius={[4, 4, 0, 0]}
-                maxBarSize={60}
-              />
-            ))}
-          </BarChart>
-        </ChartContainer>
+                <YAxis
+                  tickFormatter={formatYAxis}
+                  tickLine={false}
+                  axisLine={false}
+                  fontSize={12}
+                  className="text-slate-600"
+                  domain={[0, 30000000]}
+                  ticks={[0, 10000000, 20000000, 30000000]}
+                  width={40}
+                />
+                <ChartTooltip
+                  cursor={false}
+                  content={
+                    <ChartTooltipContent
+                      formatter={(value) => [formatYAxis(value), "Bookings"]}
+                      labelFormatter={(label) => `Month: ${label}`}
+                    />
+                  }
+                />
+                {chartData.map((entry, index) => (
+                  <Bar
+                    key={entry.month}
+                    dataKey="bookings"
+                    fill={getBarColor(index)}
+                    radius={[4, 4, 0, 0]}
+                    maxBarSize={60}
+                  />
+                ))}
+              </BarChart>
+            </ChartContainer>
+          </div>
+        </div>
       </CardContent>
     </Card>
   )

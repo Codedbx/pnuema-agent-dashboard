@@ -5,7 +5,7 @@ import { Search, MoreHorizontal, Calendar } from "lucide-react"
 
 // Mock shadcn/ui components for standalone use
 const Table = ({ children, className = "" }) => (
-  <div className={`w-full overflow-auto ${className}`}>
+  <div className={`w-full ${className}`}>
     <table className="w-full caption-bottom text-sm">{children}</table>
   </div>
 )
@@ -22,14 +22,16 @@ const TableRow = ({ children, className = "" }) => (
 
 const TableHead = ({ children, className = "" }) => (
   <th
-    className={`h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 ${className}`}
+    className={`h-10 sm:h-12 px-2 sm:px-4 text-left align-middle font-medium text-muted-foreground text-xs sm:text-sm [&:has([role=checkbox])]:pr-0 ${className}`}
   >
     {children}
   </th>
 )
 
 const TableCell = ({ children, className = "" }) => (
-  <td className={`p-4 align-middle [&:has([role=checkbox])]:pr-0 ${className}`}>{children}</td>
+  <td className={`p-2 sm:p-4 align-middle text-xs sm:text-sm [&:has([role=checkbox])]:pr-0 ${className}`}>
+    {children}
+  </td>
 )
 
 const Button = ({ children, variant = "default", size = "default", className = "", onClick, ...props }) => {
@@ -43,7 +45,7 @@ const Button = ({ children, variant = "default", size = "default", className = "
 
   const sizes = {
     default: "h-10 px-4 py-2",
-    sm: "h-9 rounded-md px-3",
+    sm: "h-8 sm:h-9 rounded-md px-2 sm:px-3 text-xs sm:text-sm",
   }
 
   return (
@@ -55,7 +57,7 @@ const Button = ({ children, variant = "default", size = "default", className = "
 
 const Input = ({ className = "", ...props }) => (
   <input
-    className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
+    className={`flex h-8 sm:h-10 w-full rounded-md border border-input bg-background px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
     {...props}
   />
 )
@@ -69,7 +71,7 @@ const Badge = ({ children, variant = "default", className = "" }) => {
 
   return (
     <div
-      className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${variants[variant]} ${className}`}
+      className={`inline-flex items-center rounded-full border px-1.5 sm:px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${variants[variant]} ${className}`}
     >
       {children}
     </div>
@@ -81,7 +83,7 @@ const Checkbox = ({ checked, onCheckedChange, ...props }) => (
     type="checkbox"
     checked={checked}
     onChange={(e) => onCheckedChange && onCheckedChange(e.target.checked)}
-    className="h-4 w-4 rounded border border-primary text-primary focus:ring-2 focus:ring-primary"
+    className="h-3 w-3 sm:h-4 sm:w-4 rounded border border-primary text-primary focus:ring-2 focus:ring-primary"
     {...props}
   />
 )
@@ -195,93 +197,95 @@ const TableComponent = () => {
   )
 
   return (
-    <div className="w-full max-w-full bg-white rounded-lg border shadow-sm">
-      {/* Table Header - Responsive */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 sm:p-6 border-b gap-4">
-        <h2 className="text-lg font-semibold text-gray-900">Upcoming Trips</h2>
+    <div className="w-full bg-white rounded-lg border shadow-sm overflow-hidden">
+      {/* Table Header - Mobile Responsive */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between p-3 sm:p-4 lg:p-6 border-b">
+        <h2 className="text-base sm:text-lg font-semibold text-gray-900">Upcoming Trips</h2>
 
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
           <Button size="sm" className="bg-black hover:bg-gray-800 order-2 sm:order-1">
             Delete
           </Button>
 
           <div className="relative order-1 sm:order-2">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 h-3 w-3 sm:h-4 sm:w-4 text-gray-400" />
             <Input
               placeholder="Search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 pr-12 w-full sm:w-48"
+              className="pl-8 sm:pl-10 pr-8 sm:pr-12 w-full sm:w-48"
             />
-            <kbd className="hidden sm:block absolute right-3 top-1/2 transform -translate-y-1/2 px-1.5 py-0.5 text-xs font-medium text-gray-500 bg-gray-100 border rounded">
+            <kbd className="hidden sm:block absolute right-2 sm:right-3 top-1/2 transform -translate-y-1/2 px-1 sm:px-1.5 py-0.5 text-xs font-medium text-gray-500 bg-gray-100 border rounded">
               ⌘K
             </kbd>
           </div>
         </div>
       </div>
 
-      {/* Table Container - Responsive with horizontal scroll */}
-      <div className="overflow-x-auto">
-        <Table>
-          <TableHeader>
-            <TableRow className="hover:bg-transparent">
-              <TableHead className="w-12 min-w-12">
-                <Checkbox
-                  checked={selectedRows.size === trips.length && trips.length > 0}
-                  onCheckedChange={handleSelectAll}
-                />
-              </TableHead>
-              <TableHead className="min-w-40">User</TableHead>
-              <TableHead className="min-w-32">Package</TableHead>
-              <TableHead className="min-w-24">Duration</TableHead>
-              <TableHead className="min-w-36">Date</TableHead>
-              <TableHead className="min-w-24">Status</TableHead>
-              <TableHead className="w-12 min-w-12"></TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {filteredTrips.map((trip) => (
-              <TableRow key={trip.id} className={selectedRows.has(trip.id) ? "bg-gray-50" : ""}>
-                <TableCell>
-                  <Checkbox checked={selectedRows.has(trip.id)} onCheckedChange={() => handleSelectRow(trip.id)} />
-                </TableCell>
-                <TableCell>
-                  <div className="flex items-center min-w-0">
-                    <img
-                      src={trip.user.avatar || "/placeholder.svg"}
-                      alt={trip.user.name}
-                      className="w-8 h-8 rounded-full object-cover mr-3 flex-shrink-0"
-                    />
-                    <span className="font-medium truncate">{trip.user.name}</span>
-                  </div>
-                </TableCell>
-                <TableCell className="font-medium">{trip.package}</TableCell>
-                <TableCell>{trip.duration}</TableCell>
-                <TableCell>
-                  <div className="flex items-center">
-                    <Calendar className="w-4 h-4 mr-2 text-gray-400 flex-shrink-0" />
-                    <span className="whitespace-nowrap">{trip.date}</span>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <Badge variant="secondary" className={getStatusColor(trip.status)}>
-                    {trip.status}
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                    <MoreHorizontal className="h-4 w-4" />
-                  </Button>
-                </TableCell>
+      {/* Table Container - Full responsive with horizontal scroll */}
+      <div className="w-full overflow-x-auto">
+        <div className="min-w-[600px]">
+          <Table>
+            <TableHeader>
+              <TableRow className="hover:bg-transparent">
+                <TableHead className="w-8 sm:w-12">
+                  <Checkbox
+                    checked={selectedRows.size === trips.length && trips.length > 0}
+                    onCheckedChange={handleSelectAll}
+                  />
+                </TableHead>
+                <TableHead className="min-w-[120px] sm:min-w-[160px]">User</TableHead>
+                <TableHead className="min-w-[100px] sm:min-w-[120px]">Package</TableHead>
+                <TableHead className="min-w-[60px] sm:min-w-[80px]">Duration</TableHead>
+                <TableHead className="min-w-[100px] sm:min-w-[120px]">Date</TableHead>
+                <TableHead className="min-w-[80px] sm:min-w-[100px]">Status</TableHead>
+                <TableHead className="w-8 sm:w-12"></TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {filteredTrips.map((trip) => (
+                <TableRow key={trip.id} className={selectedRows.has(trip.id) ? "bg-gray-50" : ""}>
+                  <TableCell>
+                    <Checkbox checked={selectedRows.has(trip.id)} onCheckedChange={() => handleSelectRow(trip.id)} />
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center min-w-0">
+                      <img
+                        src={trip.user.avatar || "/placeholder.svg"}
+                        alt={trip.user.name}
+                        className="w-6 h-6 sm:w-8 sm:h-8 rounded-full object-cover mr-2 sm:mr-3 flex-shrink-0"
+                      />
+                      <span className="font-medium truncate text-xs sm:text-sm">{trip.user.name}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell className="font-medium">{trip.package}</TableCell>
+                  <TableCell>{trip.duration}</TableCell>
+                  <TableCell>
+                    <div className="flex items-center">
+                      <Calendar className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 text-gray-400 flex-shrink-0" />
+                      <span className="whitespace-nowrap text-xs sm:text-sm">{trip.date}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant="secondary" className={getStatusColor(trip.status)}>
+                      {trip.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <Button variant="ghost" size="sm" className="h-6 w-6 sm:h-8 sm:w-8 p-0">
+                      <MoreHorizontal className="h-3 w-3 sm:h-4 sm:w-4" />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </div>
 
       {/* Empty state for filtered results */}
       {filteredTrips.length === 0 && (
-        <div className="text-center py-8 text-gray-500">No trips found matching your search.</div>
+        <div className="text-center py-6 sm:py-8 text-gray-500 text-sm">No trips found matching your search.</div>
       )}
     </div>
   )
