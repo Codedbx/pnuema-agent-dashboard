@@ -1,4 +1,3 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Progress } from "@/components/ui/progress"
 import { Bell, User, Calendar, FileText, Trash2, Edit } from "lucide-react"
@@ -74,16 +73,16 @@ const NotificationsPanel = () => {
   ]
 
   return (
-    <div className="w-80 border-l bg-background p-4 space-y-6 overflow-y-auto">
+    <div className="w-80 border-l bg-background overflow-y-auto">
       {/* Notifications Section */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium flex items-center gap-2">
+      <div className="text-card-foreground">
+        <div className="flex flex-col space-y-1.5 p-6">
+          <div className="text-sm font-medium flex items-center gap-2">
             <Bell className="h-4 w-4" />
             Notifications
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
+          </div>
+        </div>
+        <div className="p-6 pt-0 space-y-4">
           {notifications.map((notification) => (
             <div key={notification.id} className="flex items-start gap-3">
               <Avatar className="h-8 w-8">
@@ -98,15 +97,15 @@ const NotificationsPanel = () => {
               </div>
             </div>
           ))}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Activities Section */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium">Activities</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
+      <div className="text-card-foreground">
+        <div className="flex flex-col space-y-1.5 p-6 pb-3">
+          <div className="text-sm font-medium">Activities</div>
+        </div>
+        <div className="p-6 pt-0 space-y-4">
           {activities.map((activity) => (
             <div key={activity.id} className="flex items-start gap-3">
               <div className={`p-1.5 rounded-full ${activity.color}`}>
@@ -118,15 +117,15 @@ const NotificationsPanel = () => {
               </div>
             </div>
           ))}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Traffic by Website Section */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium">Traffic by Website</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
+      <div className="text-card-foreground">
+        <div className="flex flex-col space-y-1.5 p-6 pb-3">
+          <div className="text-sm font-medium">Traffic by Website</div>
+        </div>
+        <div className="p-6 pt-0 space-y-4">
           {trafficData.map((item) => (
             <div key={item.platform} className="space-y-2">
               <div className="flex justify-between text-sm">
@@ -136,8 +135,8 @@ const NotificationsPanel = () => {
               <Progress value={item.value} className="h-2" />
             </div>
           ))}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
 import AdminLayout from "./layouts/AdminLayout"
 import PublicRoute from "./routes/PublicRoute"
 import ScrollToTop from "./components/ScrollToTop"
@@ -80,11 +80,16 @@ function App() {
           <Route path="activities/:packageId/:activityId/edit" element={<EditActivity />} />
           <Route path="create-activities" element={<CreateActivities />} />
 
-          {/* Other Routes */}
-          <Route path="invoices" element={<Invoices />} />
-        </Route>
-      </Routes>
-    </Router>
+            {/* Other Routes */}
+            <Route path="invoices" element={<Invoices />} />
+          </Route>
+          {/* Redirect from root to /admin or /signin based on auth status */}
+          <Route path="/" element={<Navigate to="/admin" replace />} />
+
+          {/* Catch all - redirect to home */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Router>
   )
 }
 

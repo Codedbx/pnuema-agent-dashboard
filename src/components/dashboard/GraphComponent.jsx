@@ -1,62 +1,106 @@
-import { TrendingUp } from "lucide-react"
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
-
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
+  { month: "Jan", bookings: 18000000 },
+  { month: "Feb", bookings: 22000000 },
+  { month: "Mar", bookings: 19000000 },
+  { month: "Apr", bookings: 24000000 },
+  { month: "May", bookings: 8000000 },
+  { month: "Jun", bookings: 21000000 },
 ]
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  bookings: {
+    label: "Bookings",
     color: "hsl(var(--chart-1))",
-  },
-  mobile: {
-    label: "Mobile",
-    color: "hsl(var(--chart-2))",
   },
 }
 
 export function GraphComponent() {
+  const formatYAxis = (value) => {
+    if (value >= 1000000) {
+      return `${value / 1000000}M`
+    }
+    return value.toString()
+  }
+
+  const getBarColor = (index) => {
+    const colors = [
+      "hsl(var(--chart-1))", // Blue
+      "hsl(var(--chart-2))", // Green
+      "hsl(220 14.3% 25.9%)", // Dark gray/black
+      "hsl(var(--chart-3))", // Light blue
+      "hsl(220 14.3% 65.9%)", // Gray
+      "hsl(var(--chart-2))", // Green
+    ]
+    return colors[index % colors.length]
+  }
+
   return (
-    <Card className="w-full">
-      <CardHeader className="pb-2 sm:pb-6">
-        <CardTitle className="text-lg sm:text-xl">Bar Chart - Multiple</CardTitle>
-        <CardDescription className="text-sm">January - June 2024</CardDescription>
+    <Card className="w-full bg-slate-50/50 border-slate-200/50">
+      <CardHeader className="">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <CardTitle className="text-base sm:text-lg font-medium text-slate-900">Total bookings</CardTitle>
+          <div className="flex items-center gap-2 text-sm text-slate-600">
+            <span>View by:</span>
+            <Select defaultValue="month">
+              <SelectTrigger className="w-20 h-8 text-sm border-slate-300">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="month">Month</SelectItem>
+                <SelectItem value="week">Week</SelectItem>
+                <SelectItem value="year">Year</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
       </CardHeader>
-      <CardContent className="px-2 sm:px-6">
-        <ChartContainer config={chartConfig} className="min-h-[200px] sm:min-h-[300px]">
-          <BarChart data={chartData}>
-            <CartesianGrid vertical={false} />
+      <CardContent className="">
+        <ChartContainer config={chartConfig} className="min-h-[200px] sm:min-h-[240px] lg:min-h-[280px] w-full">
+          <BarChart data={chartData} margin={{ left: 20, right: 20, top: 20, bottom: 20 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
             <XAxis
               dataKey="month"
               tickLine={false}
               tickMargin={10}
               axisLine={false}
-              tickFormatter={(value) => value.slice(0, 3)}
               fontSize={12}
+              className="text-slate-600"
             />
-            <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
-            <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
-            <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
+            <YAxis
+              tickFormatter={formatYAxis}
+              tickLine={false}
+              axisLine={false}
+              fontSize={12}
+              className="text-slate-600"
+              domain={[0, 30000000]}
+              ticks={[0, 10000000, 20000000, 30000000]}
+            />
+            <ChartTooltip
+              cursor={false}
+              content={
+                <ChartTooltipContent
+                  formatter={(value) => [formatYAxis(value), "Bookings"]}
+                  labelFormatter={(label) => `Month: ${label}`}
+                />
+              }
+            />
+            {chartData.map((entry, index) => (
+              <Bar
+                key={entry.month}
+                dataKey="bookings"
+                fill={getBarColor(index)}
+                radius={[4, 4, 0, 0]}
+                maxBarSize={60}
+              />
+            ))}
           </BarChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm px-2 sm:px-6">
-        <div className="flex gap-2 font-medium leading-none text-sm sm:text-base">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="leading-none text-muted-foreground text-xs sm:text-sm">
-          Showing total visitors for the last 6 months
-        </div>
-      </CardFooter>
     </Card>
   )
 }

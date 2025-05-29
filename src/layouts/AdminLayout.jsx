@@ -1,8 +1,8 @@
 import { Outlet, useLocation } from "react-router-dom"
-import AppSidebar from "@/components/dashboard/Sidebar"
+import AppSidebar from "@/components/dashboard/sidebar"
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
 import AdminHeader from "@/components/dashboard/AdminHeader"
 import NotificationsPanel from "@/components/dashboard/NotificationsPanel"
-import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
 
 const AdminLayout = () => {
   const location = useLocation()
@@ -18,12 +18,16 @@ const AdminLayout = () => {
         <SidebarInset className="flex-1">
           <AdminHeader />
           <div className="flex flex-1">
-            <main className={`flex-1 p-6 ${isAdminDashboard ? "max-w-none" : "max-w-7xl"}`}>
+            <main className={`flex-1 p-3 sm:p-4 lg:p-6 ${isAdminDashboard ? "max-w-none" : "max-w-7xl mx-auto"}`}>
               <Outlet />
             </main>
+            {isAdminDashboard && (
+              <div className="hidden xl:block">
+                <NotificationsPanel />
+              </div>
+            )}
           </div>
         </SidebarInset>
-        {isAdminDashboard && <NotificationsPanel />}
       </div>
     </SidebarProvider>
   )

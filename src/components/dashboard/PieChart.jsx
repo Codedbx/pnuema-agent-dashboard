@@ -8,65 +8,79 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 
 const chartData = [
-  { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-  { browser: "firefox", visitors: 287, fill: "var(--color-firefox)" },
-  { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-  { browser: "other", visitors: 190, fill: "var(--color-other)" },
+  { location: "united-states", bookings: 386, fill: "var(--color-united-states)" },
+  { location: "mexico", bookings: 308, fill: "var(--color-mexico)" },
+  { location: "canada", bookings: 225, fill: "var(--color-canada)" },
+  { location: "other", bookings: 81, fill: "var(--color-other)" },
 ]
 
 const chartConfig = {
-  visitors: {
-    label: "Visitors",
+  bookings: {
+    label: "Bookings",
   },
-  chrome: {
-    label: "Chrome",
+  "united-states": {
+    label: "United States",
     color: "hsl(var(--chart-1))",
   },
-  safari: {
-    label: "Safari",
+  mexico: {
+    label: "Mexico",
     color: "hsl(var(--chart-2))",
   },
-  firefox: {
-    label: "Firefox",
+  canada: {
+    label: "Canada",
     color: "hsl(var(--chart-3))",
-  },
-  edge: {
-    label: "Edge",
-    color: "hsl(var(--chart-4))",
   },
   other: {
     label: "Other",
-    color: "hsl(var(--chart-5))",
+    color: "hsl(var(--chart-4))",
   },
 }
 
 export function PieChart() {
-  const totalVisitors = useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.visitors, 0)
-  }, [])
+  const totalBookings = useMemo(() => {
+    return chartData.reduce((acc, curr) => acc + curr.bookings, 0)
+  }, []) // [^2]
 
   return (
     <Card className="flex flex-col w-full">
-      <CardHeader className="items-center pb-0 sm:pb-2">
-        <CardTitle className="text-lg sm:text-xl text-center">Pie Chart - Donut with Text</CardTitle>
-        <CardDescription className="text-sm text-center">January - June 2024</CardDescription>
+      <CardHeader className="items-center pb-0 sm:pb-2 px-3 sm:px-4 lg:px-6">
+        <CardTitle className="text-base sm:text-lg lg:text-xl text-center">Bookings by Location</CardTitle>
+        <CardDescription className="text-xs sm:text-sm text-center">January - June 2024</CardDescription>
       </CardHeader>
-      <CardContent className="flex-1 pb-0 px-2 sm:px-6">
-        <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[200px] sm:max-h-[250px]">
+      <CardContent className="flex-1 pb-0 px-1 sm:px-3 lg:px-6">
+        <ChartContainer
+          config={chartConfig}
+          className="mx-auto aspect-square max-h-[180px] w-full"
+        >
           <RechartsPieChart>
             <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-            <Pie data={chartData} dataKey="visitors" nameKey="browser" innerRadius={40} strokeWidth={5}>
+            <Pie
+              data={chartData}
+              dataKey="bookings"
+              nameKey="location"
+              innerRadius={50}
+              outerRadius={80}
+              strokeWidth={2}
+              // className="sm:stroke-[3] lg:stroke-[5]"
+            >
               <Label
                 content={({ viewBox }) => {
                   if (viewBox && "cx" in viewBox && "cy" in viewBox) {
                     return (
                       <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle" dominantBaseline="middle">
-                        <tspan x={viewBox.cx} y={viewBox.cy} className="fill-foreground text-2xl sm:text-3xl font-bold">
-                          {totalVisitors.toLocaleString()}
+                        <tspan
+                          x={viewBox.cx}
+                          y={viewBox.cy}
+                          className="fill-foreground text-lg sm:text-2xl lg:text-3xl font-bold"
+                        >
+                          {totalBookings.toLocaleString()}
                         </tspan>
-                        <tspan x={viewBox.cx} y={(viewBox.cy || 0) + 20} className="fill-muted-foreground text-sm">
-                          Visitors
+                        <tspan
+                          x={viewBox.cx}
+                          y={(viewBox.cy || 0) + 16}
+                          className="fill-muted-foreground text-xs sm:text-sm"
+                        >
+                          Bookings
                         </tspan>
                       </text>
                     )
@@ -78,12 +92,12 @@ export function PieChart() {
           </RechartsPieChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm px-2 sm:px-6">
-        <div className="flex items-center gap-2 font-medium leading-none text-sm">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+      <CardFooter className="flex-col gap-1 sm:gap-2 text-sm px-3 sm:px-4 lg:px-6 pt-2 sm:pt-4">
+        <div className="flex items-center gap-1 sm:gap-2 font-medium leading-none text-xs sm:text-sm">
+          Trending up by 12.3% this month <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4" />
         </div>
         <div className="leading-none text-muted-foreground text-xs sm:text-sm text-center">
-          Showing total visitors for the last 6 months
+          Showing total bookings by location for the last 6 months
         </div>
       </CardFooter>
     </Card>
