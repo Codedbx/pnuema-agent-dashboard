@@ -18,14 +18,14 @@ const AdminLayout = () => {
         <SidebarInset className="flex-1">
           <AdminHeader />
           <div className="flex flex-1">
-            <main className={`flex-1 p-3 sm:p-4 lg:p-6 ${isAdminDashboard ? "max-w-none" : "max-w-7xl mx-auto"}`}>
+            <main className={`flex-1 p-3 sm:p-4 ${isAdminDashboard ? "max-w-none lg:p-0" : "max-w-7xl mx-auto lg:p-6"}`}>
               <Outlet />
             </main>
-            {isAdminDashboard && (
+            {/* {isAdminDashboard && (
               <div className="hidden xl:block">
                 <NotificationsPanel />
               </div>
-            )}
+            )} */}
           </div>
         </SidebarInset>
       </div>
