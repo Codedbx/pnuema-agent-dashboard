@@ -1,3 +1,4 @@
+// EditActivity.tsx
 "use client"
 
 import { useState, useEffect } from "react"
@@ -20,9 +21,10 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { Checkbox } from "@/components/ui/checkbox"
 
 const EditActivity = () => {
-  const { packageId, activityId } = useParams()
+  const { activityId } = useParams()
   const navigate = useNavigate()
   const [activity, setActivity] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -34,39 +36,38 @@ const EditActivity = () => {
   const [price, setPrice] = useState("")
   const [timeSlots, setTimeSlots] = useState([])
   const [images, setImages] = useState([])
+  const [location, setLocation] = useState("")
+  const [isActive, setIsActive] = useState(true)
+  const [isFeatured, setIsFeatured] = useState(false)
 
-  // Mock API data
+  // Mock API data (simplified without packages)
   const apiData = {
     status: "success",
     data: [
       {
-        id: 3,
-        title: "Luxury Paris Getaway",
+        id: 2,
+        title: "Swimming",
+        description:
+          "going swimming at the beach with professional instructors. This activity includes all necessary equipment and safety gear.",
+        price: "600.00",
         location: "Paris, France",
-        activities: [
+        is_active: true,
+        is_featured: true,
+        media: [
+          { id: 3, url: "/placeholder.svg?height=400&width=600", type: "image", name: "Swimming Pool" },
+          { id: 4, url: "/placeholder.svg?height=400&width=600", type: "image", name: "Beach View" },
+          { id: 5, url: "/placeholder.svg?height=400&width=600", type: "image", name: "Equipment" },
+        ],
+        time_slots: [
+          {
+            id: 1,
+            starts_at: "2025-05-25T17:34:32.000000Z",
+            ends_at: "2025-05-25T19:34:32.000000Z",
+          },
           {
             id: 2,
-            title: "Swimming",
-            description:
-              "going swimming at the beach with professional instructors. This activity includes all necessary equipment and safety gear.",
-            price: "600.00",
-            media: [
-              { id: 3, url: "/placeholder.svg?height=400&width=600", type: "image", name: "Swimming Pool" },
-              { id: 4, url: "/placeholder.svg?height=400&width=600", type: "image", name: "Beach View" },
-              { id: 5, url: "/placeholder.svg?height=400&width=600", type: "image", name: "Equipment" },
-            ],
-            time_slots: [
-              {
-                id: 1,
-                starts_at: "2025-05-25T17:34:32.000000Z",
-                ends_at: "2025-05-25T19:34:32.000000Z",
-              },
-              {
-                id: 2,
-                starts_at: "2025-05-28T16:34:59.000000Z",
-                ends_at: "2025-05-28T18:34:59.000000Z",
-              },
-            ],
+            starts_at: "2025-05-28T16:34:59.000000Z",
+            ends_at: "2025-05-28T18:34:59.000000Z",
           },
         ],
       },
@@ -76,21 +77,21 @@ const EditActivity = () => {
   useEffect(() => {
     // Simulate API call
     setTimeout(() => {
-      const pkg = apiData.data.find((p) => p.id === Number.parseInt(packageId))
-      if (pkg) {
-        const foundActivity = pkg.activities.find((a) => a.id === Number.parseInt(activityId))
-        if (foundActivity) {
-          setActivity(foundActivity)
-          setTitle(foundActivity.title)
-          setDescription(foundActivity.description)
-          setPrice(foundActivity.price)
-          setTimeSlots(foundActivity.time_slots || [])
-          setImages(foundActivity.media || [])
-        }
+      const foundActivity = apiData.data.find(a => a.id === Number.parseInt(activityId))
+      if (foundActivity) {
+        setActivity(foundActivity)
+        setTitle(foundActivity.title)
+        setDescription(foundActivity.description)
+        setPrice(foundActivity.price)
+        setLocation(foundActivity.location)
+        setIsActive(foundActivity.is_active)
+        setIsFeatured(foundActivity.is_featured)
+        setTimeSlots(foundActivity.time_slots || [])
+        setImages(foundActivity.media || [])
       }
       setLoading(false)
     }, 500)
-  }, [packageId, activityId])
+  }, [activityId])
 
   const addTimeSlot = () => {
     const newSlot = {
@@ -147,6 +148,9 @@ const EditActivity = () => {
     const updatedActivity = {
       title,
       description,
+      location,
+      is_active: isActive,
+      is_featured: isFeatured,
       price: Number.parseFloat(price).toFixed(2),
       time_slots: timeSlots.map((slot) => ({
         id: slot.id,
@@ -166,7 +170,7 @@ const EditActivity = () => {
     // Simulate API call
     setTimeout(() => {
       setSaving(false)
-      navigate(`/admin/activities/${packageId}/${activityId}`)
+      navigate(`/admin/activities/${activityId}`)
     }, 1000)
   }
 
@@ -200,7 +204,7 @@ const EditActivity = () => {
         <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-4">
           <Button
             variant="outline"
-            onClick={() => navigate(`/admin/activities/${packageId}/${activityId}`)}
+            onClick={() => navigate(`/admin/activities/${activityId}`)}
             className="w-fit"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -214,7 +218,7 @@ const EditActivity = () => {
         <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-3">
           <Button
             variant="outline"
-            onClick={() => navigate(`/admin/activities/${packageId}/${activityId}`)}
+            onClick={() => navigate(`/admin/activities/${activityId}`)}
             className="w-full sm:w-auto"
           >
             Cancel
@@ -264,6 +268,16 @@ const EditActivity = () => {
               </div>
             </div>
             <div className="space-y-2">
+              <Label htmlFor="location">Location *</Label>
+              <Input
+                id="location"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                placeholder="e.g., Paris, France"
+                required
+              />
+            </div>
+            <div className="space-y-2">
               <Label htmlFor="description">Description *</Label>
               <Textarea
                 id="description"
@@ -273,6 +287,24 @@ const EditActivity = () => {
                 className="min-h-[100px] resize-none"
                 required
               />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex items-center space-x-2">
+                <Checkbox 
+                  id="is-active" 
+                  checked={isActive} 
+                  onCheckedChange={(checked) => setIsActive(checked)} 
+                />
+                <Label htmlFor="is-active">Active</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox 
+                  id="is-featured" 
+                  checked={isFeatured} 
+                  onCheckedChange={(checked) => setIsFeatured(checked)} 
+                />
+                <Label htmlFor="is-featured">Featured</Label>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -401,9 +433,6 @@ const EditActivity = () => {
                           <AlertDialogContent>
                             <AlertDialogHeader>
                               <AlertDialogTitle>Remove Time Slot</AlertDialogTitle>
-                              <AlertDialogDescription>
-                                Are you sure you want to remove this time slot? This action cannot be undone.
-                              </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter className="flex-col space-y-2 sm:flex-row sm:justify-end sm:space-x-2 sm:space-y-0">
                               <AlertDialogCancel className="w-full sm:w-auto">Cancel</AlertDialogCancel>
@@ -474,6 +503,9 @@ const EditActivity = () => {
                   {
                     title: title || "Activity title...",
                     description: description || "Activity description...",
+                    location: location || "Location...",
+                    is_active: isActive,
+                    is_featured: isFeatured,
                     price: price ? Number.parseFloat(price).toFixed(2) : "0.00",
                     time_slots: timeSlots.map((slot) => ({
                       id: slot.id,

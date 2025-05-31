@@ -9,7 +9,6 @@ import {
   Clock,
   MapPin,
   DollarSign,
-  Package,
   ImageIcon,
   Download,
   Share2,
@@ -33,61 +32,56 @@ import {
 } from "@/components/ui/alert-dialog"
 
 const ActivityDetails = () => {
-  const { packageId, activityId } = useParams()
+  const { activityId } = useParams()
   const navigate = useNavigate()
   const [activity, setActivity] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  // Mock API data - in real app, fetch based on packageId and activityId
+  // Mock API data - simplified without packages
   const apiData = {
     status: "success",
     data: [
       {
-        id: 3,
-        title: "Luxury Paris Getaway",
-        description: "5-day luxury package with Eiffel Tower access and river cruise",
-        base_price: "2999.99",
+        id: 2,
+        title: "Swimming",
+        description:
+          "going swimming at the beach with professional instructors. This activity includes all necessary equipment and safety gear. Perfect for beginners and experienced swimmers alike.",
+        price: "600.00",
         location: "Paris, France",
         is_active: true,
         is_featured: true,
-        activities: [
-          {
-            id: 2,
-            title: "Swimming",
-            description:
-              "going swimming at the beach with professional instructors. This activity includes all necessary equipment and safety gear. Perfect for beginners and experienced swimmers alike.",
-            price: "600.00",
-            media: [
-              { id: 3, url: "/placeholder.svg?height=400&width=600", type: "image", name: "Swimming Pool" },
-              { id: 4, url: "/placeholder.svg?height=400&width=600", type: "image", name: "Beach View" },
-              { id: 5, url: "/placeholder.svg?height=400&width=600", type: "image", name: "Equipment" },
-            ],
-            time_slots: [
-              {
-                id: 1,
-                starts_at: "2025-05-25T17:34:32.000000Z",
-                ends_at: "2025-05-25T19:34:32.000000Z",
-              },
-              {
-                id: 2,
-                starts_at: "2025-05-28T16:34:59.000000Z",
-                ends_at: "2025-05-28T18:34:59.000000Z",
-              },
-            ],
-          },
+        media: [
+          { id: 3, url: "/placeholder.svg?height=400&width=600", type: "image", name: "Swimming Pool" },
+          { id: 4, url: "/placeholder.svg?height=400&width=600", type: "image", name: "Beach View" },
+          { id: 5, url: "/placeholder.svg?height=400&width=600", type: "image", name: "Equipment" },
+        ],
+        time_slots: [
           {
             id: 1,
-            title: "hiking",
-            description: "on the mountiains",
-            price: "500.00",
-            media: [{ id: 5, url: "/placeholder.svg?height=400&width=600", type: "image", name: "Mountain Trail" }],
-            time_slots: [
-              {
-                id: 3,
-                starts_at: "2025-05-28T16:36:10.000000Z",
-                ends_at: "2025-05-31T16:36:10.000000Z",
-              },
-            ],
+            starts_at: "2025-05-25T17:34:32.000000Z",
+            ends_at: "2025-05-25T19:34:32.000000Z",
+          },
+          {
+            id: 2,
+            starts_at: "2025-05-28T16:34:59.000000Z",
+            ends_at: "2025-05-28T18:34:59.000000Z",
+          },
+        ],
+      },
+      {
+        id: 1,
+        title: "Hiking",
+        description: "Explore scenic mountain trails with experienced guides",
+        price: "500.00",
+        location: "Alaska, USA",
+        is_active: true,
+        is_featured: false,
+        media: [{ id: 5, url: "/placeholder.svg?height=400&width=600", type: "image", name: "Mountain Trail" }],
+        time_slots: [
+          {
+            id: 3,
+            starts_at: "2025-05-28T16:36:10.000000Z",
+            ends_at: "2025-05-31T16:36:10.000000Z",
           },
         ],
       },
@@ -97,24 +91,13 @@ const ActivityDetails = () => {
   useEffect(() => {
     // Simulate API call
     setTimeout(() => {
-      const pkg = apiData.data.find((p) => p.id === Number.parseInt(packageId))
-      if (pkg) {
-        const foundActivity = pkg.activities.find((a) => a.id === Number.parseInt(activityId))
-        if (foundActivity) {
-          setActivity({
-            ...foundActivity,
-            packageTitle: pkg.title,
-            packageId: pkg.id,
-            packageLocation: pkg.location,
-            packagePrice: pkg.base_price,
-            isActive: pkg.is_active,
-            isFeatured: pkg.is_featured,
-          })
-        }
+      const foundActivity = apiData.data.find((a) => a.id === Number.parseInt(activityId))
+      if (foundActivity) {
+        setActivity(foundActivity)
       }
       setLoading(false)
     }, 500)
-  }, [packageId, activityId])
+  }, [activityId])
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -139,7 +122,7 @@ const ActivityDetails = () => {
   }
 
   const handleEdit = () => {
-    navigate(`/admin/activities/${packageId}/${activityId}/edit`)
+    navigate(`/admin/activities/${activityId}/edit`)
   }
 
   const handleDelete = () => {
@@ -148,15 +131,15 @@ const ActivityDetails = () => {
     navigate("/admin/activities")
   }
 
-  const getStatusBadge = () => {
-    if (activity?.isFeatured) {
+  const getStatusBadge = (activity) => {
+    if (activity?.is_featured) {
       return (
         <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
           Featured
         </Badge>
       )
     }
-    if (activity?.isActive) {
+    if (activity?.is_active) {
       return (
         <Badge variant="secondary" className="bg-green-100 text-green-800">
           Active
@@ -249,7 +232,7 @@ const ActivityDetails = () => {
             <CardHeader>
               <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
                 <CardTitle>Activity Overview</CardTitle>
-                {getStatusBadge()}
+                {getStatusBadge(activity)}
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -260,7 +243,7 @@ const ActivityDetails = () => {
 
               <Separator />
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="flex items-center space-x-2">
                   <DollarSign className="w-4 h-4 text-green-500" />
                   <div>
@@ -273,6 +256,13 @@ const ActivityDetails = () => {
                   <div>
                     <p className="text-sm text-gray-600">Time Slots</p>
                     <p className="font-medium">{activity.time_slots?.length || 0} available</p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <MapPin className="w-4 h-4 text-red-500" />
+                  <div>
+                    <p className="text-sm text-gray-600">Location</p>
+                    <p className="font-medium">{activity.location}</p>
                   </div>
                 </div>
               </div>
@@ -354,54 +344,15 @@ const ActivityDetails = () => {
 
         {/* Sidebar */}
         <div className="space-y-4 sm:space-y-6">
-          {/* Package Information */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <Package className="w-5 h-5 mr-2" />
-                Package Details
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <p className="text-sm text-gray-600">Package Name</p>
-                <p className="font-medium">{activity.packageTitle}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-600">Location</p>
-                <div className="flex items-center space-x-1">
-                  <MapPin className="w-4 h-4 text-red-500" />
-                  <p className="font-medium">{activity.packageLocation}</p>
-                </div>
-              </div>
-              <div>
-                <p className="text-sm text-gray-600">Package Base Price</p>
-                <p className="font-medium">{formatPrice(activity.packagePrice)}</p>
-              </div>
-              <Separator />
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={() => navigate(`/admin/packages/${activity.packageId}`)}
-              >
-                View Package Details
-              </Button>
-            </CardContent>
-          </Card>
-
           {/* Quick Stats */}
           <Card>
             <CardHeader>
-              <CardTitle>Quick Stats</CardTitle>
+              <CardTitle>Activity Details</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex justify-between">
                 <span className="text-sm text-gray-600">Activity ID</span>
                 <span className="font-medium">#{activity.id}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm text-gray-600">Package ID</span>
-                <span className="font-medium">#{activity.packageId}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-sm text-gray-600">Images</span>
@@ -411,6 +362,37 @@ const ActivityDetails = () => {
                 <span className="text-sm text-gray-600">Time Slots</span>
                 <span className="font-medium">{activity.time_slots?.length || 0}</span>
               </div>
+              <div className="flex justify-between">
+                <span className="text-sm text-gray-600">Status</span>
+                <span className="font-medium">
+                  {activity.is_active ? "Active" : "Inactive"}
+                  {activity.is_featured ? " (Featured)" : ""}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm text-gray-600">Location</span>
+                <span className="font-medium">{activity.location}</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Location Card */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <MapPin className="w-5 h-5 mr-2" />
+                Location
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center">
+                <MapPin className="w-4 h-4 text-red-500 mr-2" />
+                <p className="font-medium">{activity.location}</p>
+              </div>
+              <div className="mt-4 bg-gray-200 border-2 border-dashed rounded-xl w-full h-48" />
+              <Button variant="outline" className="w-full mt-4">
+                View on Map
+              </Button>
             </CardContent>
           </Card>
         </div>

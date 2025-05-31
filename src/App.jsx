@@ -76,8 +76,8 @@ function App() {
 
           {/* Activity Management Routes */}
           <Route path="activities" element={<Activities />} />
-          <Route path="activities/:packageId/:activityId" element={<ActivityDetails />} />
-          <Route path="activities/:packageId/:activityId/edit" element={<EditActivity />} />
+          <Route path="activities/:activityId" element={<ActivityDetails />} />
+          <Route path="activities/:activityId/edit" element={<EditActivity />} />
           <Route path="create-activities" element={<CreateActivities />} />
 
             {/* Other Routes */}

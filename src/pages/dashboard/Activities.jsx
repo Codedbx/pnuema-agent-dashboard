@@ -1,3 +1,4 @@
+// Activities.tsx
 "use client"
 
 import { useState, useEffect } from "react"
@@ -12,7 +13,6 @@ import {
   Clock,
   MapPin,
   DollarSign,
-  Package,
   ChevronDown,
   Download,
   RefreshCw,
@@ -61,81 +61,55 @@ const Activities = () => {
 
   const itemsPerPage = 10
 
-  // Mock API data
+  // Mock API data (simplified without packages)
   const apiData = {
     status: "success",
     data: [
       {
-        id: 3,
-        title: "Luxury Paris Getaway",
-        description: "5-day luxury package with Eiffel Tower access and river cruise",
-        base_price: "2999.99",
+        id: 2,
+        title: "Swimming",
+        description: "going swimming at the beach",
+        price: "600.00",
         location: "Paris, France",
         is_active: true,
         is_featured: true,
-        activities: [
-          {
-            id: 2,
-            title: "Swimming",
-            description: "going swimming at the beach",
-            price: "600.00",
-            time_slots: [
-              {
-                id: 1,
-                starts_at: "2025-05-25T17:34:32.000000Z",
-                ends_at: "2025-05-25T17:34:32.000000Z",
-              },
-            ],
-          },
+        time_slots: [
           {
             id: 1,
-            title: "Hiking",
-            description: "on the mountains",
-            price: "500.00",
-            time_slots: [
-              {
-                id: 3,
-                starts_at: "2025-05-28T16:36:10.000000Z",
-                ends_at: "2025-05-31T16:36:10.000000Z",
-              },
-            ],
+            starts_at: "2025-05-25T17:34:32.000000Z",
+            ends_at: "2025-05-25T17:34:32.000000Z",
           },
         ],
       },
       {
-        id: 5,
-        title: "Alaskan Adventure Package",
-        description: "10-day wildlife tour with glacier hikes and whale watching",
-        base_price: "1899.95",
+        id: 1,
+        title: "Hiking",
+        description: "on the mountains",
+        price: "500.00",
+        location: "Alaska, USA",
+        is_active: true,
+        is_featured: false,
+        time_slots: [
+          {
+            id: 3,
+            starts_at: "2025-05-28T16:36:10.000000Z",
+            ends_at: "2025-05-31T16:36:10.000000Z",
+          },
+        ],
+      },
+      {
+        id: 4,
+        title: "Glacier Hiking",
+        description: "Explore stunning glaciers with expert guides",
+        price: "750.00",
         location: "Anchorage, Alaska",
         is_active: true,
         is_featured: true,
-        activities: [
+        time_slots: [
           {
             id: 4,
-            title: "Glacier Hiking",
-            description: "Explore stunning glaciers with expert guides",
-            price: "750.00",
-            time_slots: [
-              {
-                id: 4,
-                starts_at: "2025-08-10T08:00:00.000000Z",
-                ends_at: "2025-08-10T16:00:00.000000Z",
-              },
-            ],
-          },
-          {
-            id: 5,
-            title: "Whale Watching",
-            description: "Observe magnificent whales in their natural habitat",
-            price: "450.00",
-            time_slots: [
-              {
-                id: 5,
-                starts_at: "2025-08-12T06:00:00.000000Z",
-                ends_at: "2025-08-12T12:00:00.000000Z",
-              },
-            ],
+            starts_at: "2025-08-10T08:00:00.000000Z",
+            ends_at: "2025-08-10T16:00:00.000000Z",
           },
         ],
       },
@@ -143,23 +117,11 @@ const Activities = () => {
   }
 
   useEffect(() => {
-    // Process API data to extract all activities
     setTimeout(() => {
-      const allActivities = []
-      apiData.data.forEach((pkg) => {
-        pkg.activities.forEach((activity) => {
-          allActivities.push({
-            ...activity,
-            packageTitle: pkg.title,
-            packageId: pkg.id,
-            packageLocation: pkg.location,
-            packagePrice: pkg.base_price,
-            timeSlotCount: activity.time_slots?.length || 0,
-            isActive: pkg.is_active,
-            isFeatured: pkg.is_featured,
-          })
-        })
-      })
+      const allActivities = apiData.data.map(activity => ({
+        ...activity,
+        timeSlotCount: activity.time_slots?.length || 0
+      }))
       setActivities(allActivities)
       setFilteredActivities(allActivities)
       setLoading(false)
@@ -170,14 +132,13 @@ const Activities = () => {
     const filtered = activities.filter((activity) => {
       const matchesSearch =
         activity.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        activity.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        activity.packageTitle.toLowerCase().includes(searchTerm.toLowerCase())
+        activity.description.toLowerCase().includes(searchTerm.toLowerCase())
 
       if (filterStatus === "all") return matchesSearch
       if (filterStatus === "with-slots") return matchesSearch && activity.timeSlotCount > 0
       if (filterStatus === "no-slots") return matchesSearch && activity.timeSlotCount === 0
-      if (filterStatus === "active") return matchesSearch && activity.isActive
-      if (filterStatus === "featured") return matchesSearch && activity.isFeatured
+      if (filterStatus === "active") return matchesSearch && activity.is_active
+      if (filterStatus === "featured") return matchesSearch && activity.is_featured
 
       return matchesSearch
     })
@@ -218,33 +179,28 @@ const Activities = () => {
   }
 
   const handleView = (activity) => {
-    navigate(`/admin/activities/${activity.packageId}/${activity.id}`)
+    navigate(`/admin/activities/${activity.id}`)
   }
 
   const handleEdit = (activity) => {
-    navigate(`/admin/activities/${activity.packageId}/${activity.id}/edit`)
+    navigate(`/admin/activities/${activity.id}/edit`)
   }
 
-  const handleDelete = (activityId, packageId) => {
-    setTimeout(() => setDeleteActivityId({ activityId, packageId }), 0)
+  const handleDelete = (activityId) => {
+    setTimeout(() => setDeleteActivityId(activityId), 0)
   }
 
   const confirmDelete = () => {
-    setActivities(
-      activities.filter(
-        (activity) =>
-          !(activity.id === deleteActivityId.activityId && activity.packageId === deleteActivityId.packageId),
-      ),
-    )
+    setActivities(activities.filter(activity => activity.id !== deleteActivityId))
     setTimeout(() => setDeleteActivityId(null), 100)
   }
 
-  const handleSelectRow = (activityKey) => {
+  const handleSelectRow = (activityId) => {
     const newSelected = new Set(selectedRows)
-    if (newSelected.has(activityKey)) {
-      newSelected.delete(activityKey)
+    if (newSelected.has(activityId)) {
+      newSelected.delete(activityId)
     } else {
-      newSelected.add(activityKey)
+      newSelected.add(activityId)
     }
     setSelectedRows(newSelected)
   }
@@ -253,7 +209,7 @@ const Activities = () => {
     if (selectedRows.size === currentActivities.length) {
       setSelectedRows(new Set())
     } else {
-      setSelectedRows(new Set(currentActivities.map((activity) => `${activity.packageId}-${activity.id}`)))
+      setSelectedRows(new Set(currentActivities.map(activity => activity.id)))
     }
   }
 
@@ -268,14 +224,14 @@ const Activities = () => {
   }
 
   const getStatusBadge = (activity) => {
-    if (activity.isFeatured) {
+    if (activity.is_featured) {
       return (
         <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
           Featured
         </Badge>
       )
     }
-    if (activity.isActive) {
+    if (activity.is_active) {
       return (
         <Badge variant="secondary" className="bg-green-100 text-green-800">
           Active
@@ -303,7 +259,7 @@ const Activities = () => {
         <div>
           <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">All Activities</h1>
           <p className="text-sm text-gray-600 mt-1">
-            Manage all activities across your travel packages ({filteredActivities.length} total)
+            Manage all activities ({filteredActivities.length} total)
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
@@ -346,7 +302,7 @@ const Activities = () => {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <Input
                 type="text"
-                placeholder="Search activities, packages..."
+                placeholder="Search activities..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10 w-full sm:w-80"
@@ -379,7 +335,6 @@ const Activities = () => {
                 <SelectItem value="title">Sort by Title</SelectItem>
                 <SelectItem value="price">Sort by Price</SelectItem>
                 <SelectItem value="timeSlotCount">Sort by Time Slots</SelectItem>
-                <SelectItem value="packageTitle">Sort by Package</SelectItem>
               </SelectContent>
             </Select>
             <Button
@@ -451,9 +406,6 @@ const Activities = () => {
                 <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[200px]">
                   Activity
                 </th>
-                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">
-                  Package
-                </th>
                 <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[100px]">
                   Price
                 </th>
@@ -473,16 +425,15 @@ const Activities = () => {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {currentActivities.map((activity) => {
-                const activityKey = `${activity.packageId}-${activity.id}`
                 return (
                   <tr
-                    key={activityKey}
-                    className={`${selectedRows.has(activityKey) ? "bg-blue-50" : ""} hover:bg-gray-50 transition-colors`}
+                    key={activity.id}
+                    className={`${selectedRows.has(activity.id) ? "bg-blue-50" : ""} hover:bg-gray-50 transition-colors`}
                   >
                     <td className="px-3 sm:px-6 py-4">
                       <Checkbox
-                        checked={selectedRows.has(activityKey)}
-                        onCheckedChange={() => handleSelectRow(activityKey)}
+                        checked={selectedRows.has(activity.id)}
+                        onCheckedChange={() => handleSelectRow(activity.id)}
                       />
                     </td>
                     <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
@@ -490,15 +441,6 @@ const Activities = () => {
                         <div className="text-sm font-medium text-gray-900">{activity.title}</div>
                         <div className="text-sm text-gray-500 truncate max-w-[150px] sm:max-w-xs">
                           {activity.description}
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <Package className="w-4 h-4 text-gray-400 mr-2 flex-shrink-0" />
-                        <div className="min-w-0">
-                          <div className="text-sm text-gray-900 truncate max-w-[120px]">{activity.packageTitle}</div>
-                          <div className="text-xs text-gray-500">Base: {formatPrice(activity.packagePrice)}</div>
                         </div>
                       </div>
                     </td>
@@ -518,7 +460,7 @@ const Activities = () => {
                     <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <MapPin className="w-4 h-4 text-red-500 mr-2 flex-shrink-0" />
-                        <span className="text-sm text-gray-900 truncate max-w-[100px]">{activity.packageLocation}</span>
+                        <span className="text-sm text-gray-900 truncate max-w-[100px]">{activity.location}</span>
                       </div>
                     </td>
                     <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -540,7 +482,7 @@ const Activities = () => {
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
-                            onClick={() => handleDelete(activity.id, activity.packageId)}
+                            onClick={() => handleDelete(activity.id)}
                             className="text-red-600"
                           >
                             <Trash2 className="w-4 h-4 mr-2" />
@@ -633,18 +575,17 @@ const Activities = () => {
       <div className="block sm:hidden">
         <div className="space-y-4">
           {currentActivities.map((activity) => {
-            const activityKey = `${activity.packageId}-${activity.id}`
             return (
-              <div key={activityKey} className="bg-white rounded-lg border p-4 space-y-3">
+              <div key={activity.id} className="bg-white rounded-lg border p-4 space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     <Checkbox
-                      checked={selectedRows.has(activityKey)}
-                      onCheckedChange={() => handleSelectRow(activityKey)}
+                      checked={selectedRows.has(activity.id)}
+                      onCheckedChange={() => handleSelectRow(activity.id)}
                     />
                     <div>
                       <p className="font-medium text-sm">{activity.title}</p>
-                      <p className="text-xs text-gray-500">{activity.packageTitle}</p>
+                      <p className="text-xs text-gray-500">{activity.location}</p>
                     </div>
                   </div>
                   <DropdownMenu>
@@ -664,7 +605,7 @@ const Activities = () => {
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
-                        onClick={() => handleDelete(activity.id, activity.packageId)}
+                        onClick={() => handleDelete(activity.id)}
                         className="text-red-600"
                       >
                         <Trash2 className="w-4 h-4 mr-2" />
@@ -693,13 +634,6 @@ const Activities = () => {
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600">Status</span>
                     {getStatusBadge(activity)}
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Location</span>
-                    <div className="flex items-center text-sm">
-                      <MapPin className="w-3 h-3 mr-1 text-red-500" />
-                      <span className="truncate max-w-[120px]">{activity.packageLocation}</span>
-                    </div>
                   </div>
                 </div>
               </div>

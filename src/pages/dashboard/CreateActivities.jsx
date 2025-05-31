@@ -1,18 +1,21 @@
+// CreateActivities.tsx
 "use client"
 
 import { useState } from "react"
-import { ChevronUp, ChevronDown, Clock, Plus, X, HelpCircle, Upload, Shield, Save, Check } from "lucide-react"
+import { ChevronUp, ChevronDown, Clock, Plus, X, HelpCircle, Upload, Shield, Save } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { Checkbox } from "@/components/ui/checkbox"
 
 export default function CreateActivities() {
   const [activityTitle, setActivityTitle] = useState("")
   const [activityDescription, setActivityDescription] = useState("")
   const [activityPrice, setActivityPrice] = useState("")
-  const [selectedPackages, setSelectedPackages] = useState([])
-  const [isPackageDropdownOpen, setIsPackageDropdownOpen] = useState(false)
+  const [activityLocation, setActivityLocation] = useState("")
+  const [isActive, setIsActive] = useState(true)
+  const [isFeatured, setIsFeatured] = useState(false)
   const [timeSlots, setTimeSlots] = useState([
     {
       id: 1,
@@ -20,13 +23,6 @@ export default function CreateActivities() {
       endsAt: "",
     },
   ])
-
-  const availablePackages = [
-    { id: 2, title: "Hello", location: "Nigeria" },
-    { id: 3, title: "Luxury Paris Getaway", location: "Paris, France" },
-    { id: 5, title: "Alaskan Adventure Package", location: "Anchorage, Alaska" },
-    { id: 6, title: "Tokyo City Experience", location: "Tokyo, Japan" },
-  ]
 
   const addTimeSlot = () => {
     const newSlot = {
@@ -47,25 +43,6 @@ export default function CreateActivities() {
     setTimeSlots(timeSlots.map((slot) => (slot.id === id ? { ...slot, [field]: value } : slot)))
   }
 
-  const togglePackageSelection = (packageId) => {
-    setSelectedPackages((prev) => {
-      if (prev.includes(packageId)) {
-        return prev.filter((id) => id !== packageId)
-      } else {
-        return [...prev, packageId]
-      }
-    })
-  }
-
-  const getSelectedPackageNames = () => {
-    return selectedPackages
-      .map((id) => {
-        const pkg = availablePackages.find((p) => p.id === id)
-        return pkg ? pkg.title : ""
-      })
-      .filter(Boolean)
-  }
-
   const handleSave = () => {
     const formattedTimeSlots = timeSlots
       .filter((slot) => slot.startsAt && slot.endsAt)
@@ -77,8 +54,10 @@ export default function CreateActivities() {
     const activityData = {
       title: activityTitle,
       description: activityDescription,
+      location: activityLocation,
+      is_active: isActive,
+      is_featured: isFeatured,
       price: Number.parseFloat(activityPrice).toFixed(2),
-      package_ids: selectedPackages,
       time_slots: formattedTimeSlots,
     }
 
@@ -88,9 +67,7 @@ export default function CreateActivities() {
   return (
     <div className="w-full max-w-4xl mx-auto bg-white">
       {/* Header */}
-      <div
-        className="flex items-center justify-between p-4 bg-gray-50 border-b cursor-pointer"
-      >
+      <div className="flex items-center justify-between p-4 bg-gray-50 border-b">
         <h2 className="text-lg font-medium text-gray-900">Create Activity</h2>
       </div>
 
@@ -127,6 +104,20 @@ export default function CreateActivities() {
           </div>
 
           <div className="space-y-2">
+            <Label htmlFor="activity-location" className="text-sm font-medium text-gray-700">
+              Location *
+            </Label>
+            <Input
+              id="activity-location"
+              placeholder="e.g., Paris, France"
+              value={activityLocation}
+              onChange={(e) => setActivityLocation(e.target.value)}
+              className="w-full h-10 px-3 border border-gray-300 rounded-md bg-gray-50"
+              required
+            />
+          </div>
+
+          <div className="space-y-2">
             <Label htmlFor="activity-price" className="text-sm font-medium text-gray-700">
               Price *
             </Label>
@@ -143,6 +134,25 @@ export default function CreateActivities() {
                 className="w-full h-10 pl-8 pr-3 border border-gray-300 rounded-md bg-gray-50"
                 required
               />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex items-center space-x-2">
+              <Checkbox 
+                id="create-is-active" 
+                checked={isActive} 
+                onCheckedChange={(checked) => setIsActive(checked)} 
+              />
+              <Label htmlFor="create-is-active">Active</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Checkbox 
+                id="create-is-featured" 
+                checked={isFeatured} 
+                onCheckedChange={(checked) => setIsFeatured(checked)} 
+              />
+              <Label htmlFor="create-is-featured">Featured</Label>
             </div>
           </div>
         </div>
@@ -217,7 +227,7 @@ export default function CreateActivities() {
         </div>
 
         {/* Activity Data Preview */}
-        {(activityTitle || activityDescription || activityPrice || selectedPackages.length > 0) && (
+        {(activityTitle || activityDescription || activityPrice) && (
           <div className="border-t border-gray-200 pt-4 sm:pt-6">
             <h3 className="text-sm font-medium text-gray-900 mb-2">API Data Preview</h3>
             <div className="p-3 bg-gray-100 rounded-md text-xs font-mono overflow-x-auto">
@@ -226,8 +236,10 @@ export default function CreateActivities() {
                   {
                     title: activityTitle || "Activity title...",
                     description: activityDescription || "Activity description...",
+                    location: activityLocation || "Location...",
+                    is_active: isActive,
+                    is_featured: isFeatured,
                     price: activityPrice ? Number.parseFloat(activityPrice).toFixed(2) : "0.00",
-                    package_ids: selectedPackages,
                     time_slots: timeSlots
                       .filter((slot) => slot.startsAt && slot.endsAt)
                       .map((slot) => ({
@@ -265,7 +277,6 @@ export default function CreateActivities() {
               variant="outline"
               size="sm"
               className="h-8 px-4 text-sm border-gray-300 text-gray-700 hover:bg-gray-50"
-              onClick={() => setIsPackageDropdownOpen(false)}
             >
               Cancel
             </Button>
@@ -276,6 +287,7 @@ export default function CreateActivities() {
               disabled={
                 !activityTitle ||
                 !activityDescription ||
+                !activityLocation ||
                 !activityPrice ||
                 timeSlots.some((slot) => !slot.startsAt || !slot.endsAt)
               }
