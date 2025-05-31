@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 const CreateRole = () => {
   const navigate = useNavigate()
@@ -18,9 +19,19 @@ const CreateRole = () => {
 
   const [formData, setFormData] = useState({
     name: "",
-    description: "",
+    guardName: "web",
     is_active: true,
   })
+
+  const validateForm = () => {
+  const newErrors = {}
+  
+  if (!formData.name.trim()) newErrors.name = "Role name is required"
+  if (!formData.guardName.trim()) newErrors.guardName = "Guard name is required"
+  
+  setErrors(newErrors)
+  return Object.keys(newErrors).length === 0
+}
 
   const [errors, setErrors] = useState({})
 
@@ -36,16 +47,6 @@ const CreateRole = () => {
         [field]: "",
       }))
     }
-  }
-
-  const validateForm = () => {
-    const newErrors = {}
-
-    if (!formData.name.trim()) newErrors.name = "Role name is required"
-    if (!formData.description.trim()) newErrors.description = "Description is required"
-
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
   }
 
   const handleSubmit = async (e) => {
@@ -104,30 +105,29 @@ const CreateRole = () => {
               {/* Role Name */}
               <div className="space-y-2">
                 <Label htmlFor="name">Role Name *</Label>
-                <div className="relative">
-                  <Input
-                    id="name"
-                    value={formData.name}
-                    onChange={(e) => handleInputChange("name", e.target.value)}
-                    placeholder="Enter role name"
-                    className={errors.name ? "border-red-500" : ""}
-                  />
-                </div>
+                <Input
+                  id="name"
+                  value={formData.name}
+                  onChange={(e) => handleInputChange("name", e.target.value)}
+                  placeholder="Enter role name"
+                  className={errors.name ? "border-red-500" : ""}
+                />
                 {errors.name && <p className="text-sm text-red-600 mt-1">{errors.name}</p>}
               </div>
 
-              {/* Description */}
+              {/* Guard Name */}
               <div className="space-y-2">
-                <Label htmlFor="description">Description *</Label>
-                <Textarea
-                  id="description"
-                  value={formData.description}
-                  onChange={(e) => handleInputChange("description", e.target.value)}
-                  placeholder="Enter role description"
-                  rows={3}
-                  className={errors.description ? "border-red-500" : ""}
-                />
-                {errors.description && <p className="text-sm text-red-600 mt-1">{errors.description}</p>}
+                <Label htmlFor="guardName">Guard Name *</Label>
+                <Select value={formData.guardName} onValueChange={(value) => handleInputChange("guardName", value)}>
+                  <SelectTrigger className={errors.guardName ? "border-red-500" : ""}>
+                    <SelectValue placeholder="Select guard name" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="web">web</SelectItem>
+                    <SelectItem value="api">api</SelectItem>
+                  </SelectContent>
+                </Select>
+                {errors.guardName && <p className="text-sm text-red-600 mt-1">{errors.guardName}</p>}
               </div>
 
               <Separator />

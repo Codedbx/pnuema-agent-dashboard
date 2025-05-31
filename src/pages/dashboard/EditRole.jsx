@@ -11,18 +11,19 @@ import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 const EditRole = () => {
-  const navigate = useNavigate()
-  const { roleId } = useParams()
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [loading, setLoading] = useState(true)
+  const navigate = useNavigate();
+  const { roleId } = useParams();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-    is_active: true,
-  })
+  name: "",
+  guardName: "web", // Add this field
+  is_active: true,
+})
 
   const [errors, setErrors] = useState({})
 
@@ -61,20 +62,19 @@ const EditRole = () => {
   ]
 
   useEffect(() => {
-    // Simulate API call
-    setLoading(true)
-    setTimeout(() => {
-      const foundRole = sampleRoles.find((r) => r.id === roleId)
-      if (foundRole) {
-        setFormData({
-          name: foundRole.name,
-          description: foundRole.description,
-          is_active: foundRole.is_active,
-        })
-      }
-      setLoading(false)
-    }, 1000)
-  }, [roleId])
+  setLoading(true)
+  setTimeout(() => {
+    const foundRole = sampleRoles.find((r) => r.id === roleId)
+    if (foundRole) {
+      setFormData({
+        name: foundRole.name,
+        guardName: foundRole.guardName, // Add this line
+        is_active: foundRole.is_active,
+      })
+    }
+    setLoading(false)
+  }, 1000)
+}, [roleId])
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({
@@ -92,15 +92,14 @@ const EditRole = () => {
   }
 
   const validateForm = () => {
-    const newErrors = {}
-
-    // Required fields validation
-    if (!formData.name.trim()) newErrors.name = "Role name is required"
-    if (!formData.description.trim()) newErrors.description = "Description is required"
-
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
+  const newErrors = {}
+  
+  if (!formData.name.trim()) newErrors.name = "Role name is required"
+  if (!formData.guardName.trim()) newErrors.guardName = "Guard name is required" // Add this line
+  
+  setErrors(newErrors)
+  return Object.keys(newErrors).length === 0
+}
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -139,31 +138,31 @@ const EditRole = () => {
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => navigate(`/admin/roles/${roleId}`)}
-            className="flex items-center space-x-2"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Back to Role Details</span>
-          </Button>
-          <div>
-            <h1 className="text-2xl font-semibold text-gray-900">Edit Role</h1>
-            <p className="text-sm text-gray-600 mt-1">Update role information</p>
-          </div>
-        </div>
+    <div className="p-4 sm:p-6 max-w-4xl mx-auto space-y-4 sm:space-y-6">
+  {/* Header */}
+  <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+    <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-4">
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={() => navigate(`/admin/roles/${roleId}`)}
+        className="flex items-center space-x-2 w-fit"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        <span>Back to Role Details</span>
+      </Button>
+      <div>
+        <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">Edit Role</h1>
+        <p className="text-sm text-gray-600 mt-1">Update role information</p>
       </div>
+    </div>
+  </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Role Information Card */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
+            <CardTitle className="flex items-center space-x-2 text-lg">
               <Shield className="w-5 h-5" />
               <span>Role Information</span>
             </CardTitle>
@@ -187,19 +186,20 @@ const EditRole = () => {
               </div>
 
               {/* Description */}
-              <div>
-                <Label htmlFor="description">Description *</Label>
-                <Textarea
-                  id="description"
-                  value={formData.description}
-                  onChange={(e) => handleInputChange("description", e.target.value)}
-                  placeholder="Enter role description"
-                  rows={3}
-                  className={errors.description ? "border-red-500" : ""}
-                />
-                {errors.description && <p className="text-sm text-red-600 mt-1">{errors.description}</p>}
+              <div className="space-y-2">
+                <Label htmlFor="guardName">Guard Name *</Label>
+                <Select value={formData.guardName} onValueChange={(value) => handleInputChange("guardName", value)}>
+                  <SelectTrigger className={errors.guardName ? "border-red-500" : ""}>
+                    <SelectValue placeholder="Select guard name" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="web">web</SelectItem>
+                    <SelectItem value="api">api</SelectItem>
+                  </SelectContent>
+                </Select>
+                {errors.guardName && <p className="text-sm text-red-600 mt-1">{errors.guardName}</p>}
               </div>
-
+              
               <Separator />
 
               {/* Status */}
@@ -218,16 +218,17 @@ const EditRole = () => {
         </Card>
 
         {/* Action Buttons */}
-        <div className="flex items-center justify-end space-x-4 pt-6">
+        <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-end sm:space-y-0 sm:space-x-4 pt-4 sm:pt-6">
           <Button
             type="button"
             variant="outline"
             onClick={() => navigate(`/admin/roles/${roleId}`)}
             disabled={isSubmitting}
+            className="w-full sm:w-auto"
           >
             Cancel
           </Button>
-          <Button type="submit" disabled={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
             {isSubmitting ? (
               <>
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />

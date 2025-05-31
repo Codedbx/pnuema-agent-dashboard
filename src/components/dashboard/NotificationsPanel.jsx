@@ -80,7 +80,7 @@ const NotificationsPanel = () => {
 
   return (
     <div
-      className={`border-l bg-background overflow-y-auto transition-all duration-300 ease-in-out ${
+      className={`border-l border-b bg-background overflow-y-auto transition-all duration-300 ease-in-out ${
         isCollapsed ? "w-12" : "w-80"
       }`}
     >

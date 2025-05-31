@@ -42,6 +42,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import { Badge } from "@/components/ui/badge"
 
 const RoleManagement = () => {
   const navigate = useNavigate()
@@ -55,92 +56,105 @@ const RoleManagement = () => {
   const [selectedRows, setSelectedRows] = useState(new Set())
   const [showMobileOptions, setShowMobileOptions] = useState(false)
 
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 10
+
   // Sample data
-  const [roles, setRoles] = useState([
-    {
-      id: 1,
-      name: "Super Admin",
-      description: "Full system access with all permissions",
-      userCount: 2,
-      color: "bg-red-100 text-red-800",
-      createdAt: "2024-01-15",
-      status: "active",
-    },
-    {
-      id: 2,
-      name: "Admin",
-      description: "Administrative access with most permissions",
-      userCount: 5,
-      color: "bg-blue-100 text-blue-800",
-      createdAt: "2024-01-20",
-      status: "active",
-    },
-    {
-      id: 3,
-      name: "Agent",
-      description: "Travel agent with booking and customer management",
-      userCount: 15,
-      color: "bg-green-100 text-green-800",
-      createdAt: "2024-02-01",
-      status: "active",
-    },
-    {
-      id: 4,
-      name: "Customer Support",
-      description: "Customer service representative with limited access",
-      userCount: 8,
-      color: "bg-purple-100 text-purple-800",
-      createdAt: "2024-02-10",
-      status: "active",
-    },
-    {
-      id: 5,
-      name: "Viewer",
-      description: "Read-only access for reporting and analytics",
-      userCount: 3,
-      color: "bg-gray-100 text-gray-800",
-      createdAt: "2024-02-15",
-      status: "inactive",
-    },
-  ])
+ const [roles, setRoles] = useState([
+  {
+    id: 1,
+    name: "Super Admin",
+    description: "Full system access with all permissions", // Add this field
+    guardName: "web",
+    permissionCount: 88,
+    userCount: 2,
+    color: "bg-red-100 text-red-800",
+    createdAt: "2024-01-15",
+    updatedAt: "Feb 11, 2025 01:03:11",
+    status: "active",
+  },
+  {
+    id: 2,
+    name: "Admin",
+    description: "Administrative access with limited permissions", // Add this field
+    guardName: "web", 
+    permissionCount: 10,
+    userCount: 5,
+    color: "bg-blue-100 text-blue-800",
+    createdAt: "2024-01-20",
+    updatedAt: "Jan 12, 2025 23:52:55",
+    status: "active",
+  },
+  {
+    id: 3,
+    name: "Customer Service",
+    description: "Customer support and service management", // Add this field
+    guardName: "web",
+    permissionCount: 4,
+    userCount: 8,
+    color: "bg-purple-100 text-purple-800",
+    createdAt: "2024-02-10",
+    updatedAt: "Jan 12, 2025 23:52:55",
+    status: "active",
+  },
+  {
+    id: 4,
+    name: "User",
+    description: "Basic user access with minimal permissions", // Add this field
+    guardName: "web",
+    permissionCount: 0,
+    userCount: 15,
+    color: "bg-green-100 text-green-800",
+    createdAt: "2024-02-01",
+    updatedAt: "Jan 12, 2025 23:52:55",
+    status: "active",
+  },
+])
+
 
   const [filteredRoles, setFilteredRoles] = useState(roles)
 
   // Filter and sort roles whenever dependencies change
   useEffect(() => {
-    const filtered = roles.filter((role) => {
-      const matchesSearch =
-        role.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        role.description.toLowerCase().includes(searchTerm.toLowerCase())
+  const filtered = roles.filter((role) => {
+    const matchesSearch =
+      role.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      role.description.toLowerCase().includes(searchTerm.toLowerCase())
 
-      if (filterStatus === "all") return matchesSearch
-      if (filterStatus === "active") return matchesSearch && role.status === "active"
-      if (filterStatus === "inactive") return matchesSearch && role.status === "inactive"
-      if (filterStatus === "high-users") return matchesSearch && role.userCount >= 10
-      if (filterStatus === "low-users") return matchesSearch && role.userCount < 10
+    if (filterStatus === "all") return matchesSearch
+    if (filterStatus === "active") return matchesSearch && role.status === "active"
+    if (filterStatus === "inactive") return matchesSearch && role.status === "inactive"
+    if (filterStatus === "high-users") return matchesSearch && role.userCount >= 10
+    if (filterStatus === "low-users") return matchesSearch && role.userCount < 10
 
-      return matchesSearch
-    })
+    return matchesSearch
+  })
 
-    // Sort roles
-    filtered.sort((a, b) => {
-      let aValue = a[sortBy]
-      let bValue = b[sortBy]
+  // Sort roles
+  filtered.sort((a, b) => {
+    let aValue = a[sortBy]
+    let bValue = b[sortBy]
 
-      if (sortBy === "userCount") {
-        aValue = Number(aValue)
-        bValue = Number(bValue)
-      }
+    if (sortBy === "userCount") {
+      aValue = Number(aValue)
+      bValue = Number(bValue)
+    }
 
-      if (sortOrder === "asc") {
-        return aValue > bValue ? 1 : -1
-      } else {
-        return aValue < bValue ? 1 : -1
-      }
-    })
+    if (sortOrder === "asc") {
+      return aValue > bValue ? 1 : -1
+    } else {
+      return aValue < bValue ? 1 : -1
+    }
+  })
 
-    setFilteredRoles(filtered)
-  }, [searchTerm, filterStatus, sortBy, sortOrder, roles])
+  setFilteredRoles(filtered)
+  setCurrentPage(1) // Add this line to reset to page 1
+}, [searchTerm, filterStatus, sortBy, sortOrder, roles])
+
+  const totalPages = Math.ceil(filteredRoles.length / itemsPerPage)
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const endIndex = startIndex + itemsPerPage
+  const currentRoles = filteredRoles.slice(startIndex, endIndex)
 
   const handleDeleteRole = (roleId) => {
     setDeleteRoleId(roleId)
@@ -188,12 +202,12 @@ const RoleManagement = () => {
   }
 
   const handleSelectAll = () => {
-    if (selectedRows.size === filteredRoles.length) {
-      setSelectedRows(new Set())
-    } else {
-      setSelectedRows(new Set(filteredRoles.map((role) => role.id)))
-    }
+  if (selectedRows.size === currentRoles.length) {
+    setSelectedRows(new Set())
+  } else {
+    setSelectedRows(new Set(currentRoles.map((role) => role.id)))
   }
+}
 
   const handleBulkDelete = () => {
     setRoles(roles.filter((role) => !selectedRows.has(role.id)))
@@ -243,14 +257,6 @@ const RoleManagement = () => {
           <div
             className={`${showMobileOptions ? "flex" : "hidden"} flex-col w-full space-y-2 sm:flex sm:flex-row sm:w-auto sm:space-y-0 sm:space-x-3`}
           >
-            <Button variant="outline" onClick={handleRefresh} className="w-full sm:w-auto">
-              <RefreshCw className="w-4 h-4 mr-2" />
-              Refresh
-            </Button>
-            <Button variant="outline" className="w-full sm:w-auto">
-              <Download className="w-4 h-4 mr-2" />
-              Export
-            </Button>
             <Button onClick={handleCreateRole} className="w-full sm:w-auto">
               <Plus className="w-4 h-4 mr-2" />
               Create Role
@@ -362,106 +368,101 @@ const RoleManagement = () => {
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
-              <tr>
-                <th className="w-12 px-3 sm:px-6 py-3 text-left">
-                  <Checkbox
-                    checked={selectedRows.size === filteredRoles.length && filteredRoles.length > 0}
-                    onCheckedChange={handleSelectAll}
-                  />
-                </th>
-                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">
-                  Role
-                </th>
-                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[200px]">
-                  Description
-                </th>
-                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[100px]">
-                  Users
-                </th>
-                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[100px]">
-                  Status
-                </th>
-                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">
-                  Created
-                </th>
-                <th className="px-3 sm:px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[100px]">
-                  Actions
-                </th>
-              </tr>
-            </thead>
+  <tr>
+    <th className="w-12 px-3 sm:px-6 py-3 text-left">
+      <Checkbox
+        checked={selectedRows.size === currentRoles.length && currentRoles.length > 0}
+        onCheckedChange={handleSelectAll}
+      />
+    </th>
+    <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+      Role
+    </th>
+    <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+      Guard Name
+    </th>
+    <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+      Permissions
+    </th>
+    <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+      Users
+    </th>
+    <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+      Updated At
+    </th>
+    <th className="px-3 sm:px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+      Actions
+    </th>
+  </tr>
+</thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {filteredRoles.map((role) => (
-                <tr
-                  key={role.id}
-                  className={`${selectedRows.has(role.id) ? "bg-blue-50" : ""} hover:bg-gray-50 transition-colors`}
-                >
-                  <td className="px-3 sm:px-6 py-4">
-                    <Checkbox checked={selectedRows.has(role.id)} onCheckedChange={() => handleSelectRow(role.id)} />
-                  </td>
-                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div
-                        className={`w-6 h-6 sm:w-8 sm:h-8 ${role.color} rounded-lg flex items-center justify-center mr-2 sm:mr-3 flex-shrink-0`}
-                      >
-                        <Shield className="w-3 h-3 sm:w-4 sm:h-4" />
-                      </div>
-                      <div>
-                        <div className="font-medium text-gray-900 text-sm">{role.name}</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-3 sm:px-6 py-4">
-                    <div className="text-sm text-gray-900 max-w-[150px] sm:max-w-xs truncate">{role.description}</div>
-                  </td>
-                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center text-sm text-gray-500">
-                      <Users className="w-4 h-4 mr-1" />
-                      <span>{role.userCount}</span>
-                    </div>
-                  </td>
-                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
-                    <span
-                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        role.status === "active" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-                      }`}
-                    >
-                      {role.status}
-                    </span>
-                  </td>
-                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <div className="flex items-center">
-                      <Calendar className="w-4 h-4 mr-1 hidden sm:block" />
-                      <span className="text-xs sm:text-sm">{formatDate(role.createdAt)}</span>
-                    </div>
-                  </td>
-                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="sm">
-                          <span className="hidden sm:inline">Actions</span>
-                          <MoreVertical className="w-4 h-4 sm:ml-1" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => handleViewRole(role.id)}>
-                          <Eye className="w-4 h-4 mr-2" />
-                          View Details
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleEditRole(role.id)}>
-                          <Edit className="w-4 h-4 mr-2" />
-                          Edit Role
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={() => handleDeleteRole(role.id)} className="text-red-600">
-                          <Trash2 className="w-4 h-4 mr-2" />
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+  {currentRoles.map((role) => (
+    <tr
+      key={role.id}
+      className={`${selectedRows.has(role.id) ? "bg-blue-50" : ""} hover:bg-gray-50 transition-colors`}
+    >
+      <td className="px-3 sm:px-6 py-4">
+        <Checkbox checked={selectedRows.has(role.id)} onCheckedChange={() => handleSelectRow(role.id)} />
+      </td>
+      <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
+        <div>
+          <div className="text-sm font-medium text-gray-900">{role.name}</div>
+          <div className="text-xs sm:text-sm text-gray-500 truncate max-w-[100px] sm:max-w-xs">
+            {role.description}
+          </div>
+        </div>
+      </td>
+      <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
+        <Badge variant="outline" className="text-xs bg-orange-100 text-orange-800">
+          {role.guardName}
+        </Badge>
+      </td>
+      <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
+        <Badge variant="default" className="text-xs bg-green-100 text-green-800">
+          <Shield className="w-3 h-3 mr-1" />
+          {role.permissionCount}
+        </Badge>
+      </td>
+      <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
+        <Badge variant="secondary" className="text-xs">
+          <Users className="w-3 h-3 mr-1" />
+          {role.userCount}
+        </Badge>
+      </td>
+      <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+        <div className="flex items-center">
+          <Calendar className="w-4 h-4 text-blue-500 mr-2" />
+          <span className="text-xs sm:text-sm">{role.updatedAt}</span>
+        </div>
+      </td>
+      <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="sm" className="h-8 px-2 sm:px-4">
+              <span className="hidden sm:inline">Actions</span>
+              <ChevronDown className="w-4 h-4 sm:ml-1" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => handleViewRole(role.id)}>
+              <Eye className="w-4 h-4 mr-2" />
+              View Details
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleEditRole(role.id)}>
+              <Edit className="w-4 h-4 mr-2" />
+              Edit Role
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => handleDeleteRole(role.id)} className="text-red-600">
+              <Trash2 className="w-4 h-4 mr-2" />
+              Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </td>
+    </tr>
+  ))}
+</tbody>
           </table>
         </div>
 
@@ -473,6 +474,77 @@ const RoleManagement = () => {
           </div>
         )}
       </div>
+
+      {totalPages > 1 && (
+  <div className="bg-white px-4 py-3 flex flex-col sm:flex-row items-center justify-between border-t border-gray-200 sm:px-6">
+    <div className="flex flex-1 justify-between w-full sm:hidden">
+      <Button
+        variant="outline"
+        onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+        disabled={currentPage === 1}
+        className="w-24"
+      >
+        Previous
+      </Button>
+      <div className="flex items-center justify-center px-4">
+        <span className="text-sm text-gray-700">
+          Page {currentPage} of {totalPages}
+        </span>
+      </div>
+      <Button
+        variant="outline"
+        onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+        disabled={currentPage === totalPages}
+        className="w-24"
+      >
+        Next
+      </Button>
+    </div>
+    <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+      <div>
+        <p className="text-sm text-gray-700">
+          Showing <span className="font-medium">{startIndex + 1}</span> to{" "}
+          <span className="font-medium">{Math.min(endIndex, filteredRoles.length)}</span> of{" "}
+          <span className="font-medium">{filteredRoles.length}</span> results
+        </p>
+      </div>
+      <div>
+        <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </Button>
+          {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+            const page = i + 1
+            return (
+              <Button
+                key={page}
+                variant={page === currentPage ? "default" : "outline"}
+                size="sm"
+                onClick={() => setCurrentPage(page)}
+              >
+                {page}
+              </Button>
+            )
+          })}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </Button>
+        </nav>
+      </div>
+    </div>
+  </div>
+)}
+
 
       {/* Delete Confirmation Dialog */}
       <AlertDialog
@@ -491,12 +563,12 @@ const RoleManagement = () => {
               this role.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDelete} className="bg-red-600 hover:bg-red-700">
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
+          <AlertDialogFooter className="flex-col space-y-2 sm:flex-row sm:justify-end sm:space-x-2 sm:space-y-0">
+  <AlertDialogCancel className="w-full sm:w-auto">Cancel</AlertDialogCancel>
+  <AlertDialogAction onClick={confirmDelete} className="w-full sm:w-auto bg-red-600 hover:bg-red-700">
+    Delete
+  </AlertDialogAction>
+</AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
     </div>

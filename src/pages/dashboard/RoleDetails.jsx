@@ -207,23 +207,28 @@ const RoleDetails = () => {
               {role.status === "active" ? "Active" : "Inactive"}
             </Badge>
           </CardTitle>
-          <CardDescription>{role.description}</CardDescription>
+          {/* Remove CardDescription entirely */}
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <div className="space-y-4">
               <div>
+                <h3 className="text-sm font-medium text-gray-500">Guard Name</h3>
+                <p className="mt-1 flex items-center text-sm text-gray-900">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                    {role.guardName}
+                  </span>
+                </p>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-gray-500">Permissions</h3>
+                <p className="mt-1 text-sm font-medium text-green-600">{role.permissionCount} permissions</p>
+              </div>
+              <div>
                 <h3 className="text-sm font-medium text-gray-500">Created</h3>
                 <p className="mt-1 flex items-center text-sm text-gray-900">
                   <Calendar className="w-4 h-4 mr-2 text-gray-500" />
                   {role.createdAt}
-                </p>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium text-gray-500">Last Updated</h3>
-                <p className="mt-1 flex items-center text-sm text-gray-900">
-                  <Clock className="w-4 h-4 mr-2 text-gray-500" />
-                  {role.updatedAt}
                 </p>
               </div>
             </div>
@@ -249,6 +254,13 @@ const RoleDetails = () => {
                 <p className="mt-1 flex items-center text-sm text-gray-900">
                   <Users className="w-4 h-4 mr-2 text-gray-500" />
                   {role.userCount} users have this role
+                </p>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-gray-500">Last Updated</h3>
+                <p className="mt-1 flex items-center text-sm text-gray-900">
+                  <Clock className="w-4 h-4 mr-2 text-gray-500" />
+                  {role.updatedAt}
                 </p>
               </div>
             </div>
